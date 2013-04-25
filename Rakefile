@@ -10,10 +10,9 @@ namespace :assets do
     require 'rack-putty'
     require 'tent-admin/app/middleware'
     require 'tent-admin/app/asset_server'
-    t.environment = TentAdmin::AssetServer.sprockets_environment(
-      :asset_root => 'lib/assets',
-      :logfile => '/dev/null'
-    )
+    TentAdmin::AssetServer.asset_root = 'lib/assets'
+    TentAdmin::AssetServer.logfile = '/dev/null'
+    t.environment = TentAdmin::AssetServer.sprockets_environment
 
     t.environment.js_compressor = Uglifier.new
     t.environment.css_compressor = YUI::CssCompressor.new

@@ -14,6 +14,8 @@ module TentAdmin
       self.class.settings.merge!(settings)
     end
 
+    AssetServer.asset_root = File.expand_path('../../assets', __FILE__) # lib/assets
+
     include Rack::Putty::Router
 
     stack_base SerializeResponse

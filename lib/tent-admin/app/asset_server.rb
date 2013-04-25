@@ -21,35 +21,37 @@ module TentAdmin
 
       DEFAULT_MIME = 'application/octet-stream'.freeze
 
-      def self.sprockets_environment(options={})
-        environment = Sprockets::Environment.new do |env|
-          env.logger = Logger.new(options[:logfile] || STDOUT)
-          env.context_class.class_eval do
-            include SprocketsHelpers
+      class << self
+        attr_accessor :asset_root, :logfile
+      end
+
+      def self.sprockets_environment
+        @environment ||= begin
+          environment = Sprockets::Environment.new do |env|
+            env.logger = Logger.new(@logfile || STDOUT)
+            env.context_class.class_eval do
+              include SprocketsHelpers
+            end
           end
+
+          paths = %w[ javascripts stylesheets images fonts ]
+          paths.each do |path|
+            environment.append_path(File.join(@asset_root, path))
+          end
+
+          MarblesJS.sprockets_setup(environment)
+          Icing::Sprockets.setup(environment)
+
+          environment
         end
-
-        paths = %w[ javascripts stylesheets images fonts ]
-        paths.each do |path|
-          environment.append_path(File.join(options[:asset_root], path))
-        end
-
-        MarblesJS.sprockets_setup(environment)
-        Icing::Sprockets.setup(environment)
-
-        environment
       end
 
       def initialize(app, options = {})
         super
 
         @public_dir = @options[:public_dir] || App.settings[:public_dir] || File.expand_path('../../../../public', __FILE__) # lib/../public
-        @asset_root = @options[:asset_root] || App.settings[:asset_root] || File.expand_path('../../../assets', __FILE__) # lib/assets
 
-        @sprockets_environment = self.class.sprockets_environment(
-          :asset_root => @asset_root,
-          :logfile => @options[:logfile] || App.settings[:asset_logfile]
-        )
+        @sprockets_environment = self.class.sprockets_environment
       end
 
       def action(env)
