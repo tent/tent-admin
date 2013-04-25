@@ -20,7 +20,20 @@ module TentAdmin
 
     stack_base SerializeResponse
 
+    class Favicon < Middleware
+      def action(env)
+        env['REQUEST_PATH'].sub!(%r{/favicon}, "/assets/favicon")
+        env['params'][:splat] = 'favicon.ico'
+        env
+      end
+    end
+
     get '/assets/*' do |b|
+      b.use AssetServer
+    end
+
+    get '/favicon.ico' do |b|
+      b.use Favicon
       b.use AssetServer
     end
   end
