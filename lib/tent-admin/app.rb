@@ -5,6 +5,7 @@ module TentAdmin
     require 'tent-admin/app/middleware'
     require 'tent-admin/app/serialize_response'
     require 'tent-admin/app/asset_server'
+    require 'tent-admin/app/render_view'
 
     def self.settings
       @settings ||= Hash.new
