@@ -24,6 +24,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'sass'
   gem.add_runtime_dependency 'marbles-js'
   gem.add_runtime_dependency 'icing'
+  gem.add_runtime_dependency 'omniauth-tent'
+  gem.add_runtime_dependency 'pg'
+  gem.add_runtime_dependency 'sequel'
+  gem.add_runtime_dependency 'sequel-json'
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"

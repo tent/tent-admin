@@ -2,8 +2,10 @@ require "tent-admin/version"
 
 module TentAdmin
   require 'tent-admin/app'
+  require 'tent-admin/model'
 
-  def self.new(*args, &block)
-    App.new(*args, &block)
+  def self.new(options = {}, &block)
+    Model.new(options, &block)
+    App.new(options, &block)
   end
 end

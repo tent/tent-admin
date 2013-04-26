@@ -12,6 +12,6 @@ require 'securerandom'
 map '/' do
   use Rack::Session::Cookie,  :key => 'tent-admin.session',
                               :expire_after => 2592000, # 1 month
-                              :secret => ENV['COOKIE_SECRET'] || SecureRandom.hex
+                              :secret => ENV['SESSION_SECRET'] || SecureRandom.hex
   run TentAdmin.new
 end

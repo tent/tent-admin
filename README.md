@@ -16,19 +16,37 @@ And then execute:
 
 ### Mounting in an existing Rack app
 
+```
+createdb tent-admin
+```
+
 ```ruby
 require 'tent-admin'
 
 map '/admin' do
-  run TentAdmin.new
+  run TentAdmin.new(:database_url => 'postgres://localhost/tent-admin', :database_logfile => STDOUT)
 end
 ```
 
 ### Running on it's own
 
-```bash
-bundle exec puma
 ```
+createdb tent-admin
+DATABASE_URL=postgres://localhost/tent-admin bundle exec puma
+```
+
+### ENV variables
+
+name | required | description
+---- | -------- | -----------
+URL | Yes | URL app is mounted at
+DATABASE_URL | Yes | Postgres Database URL
+DATABASE_LOGFILE | No | Path or `IO` for database log
+SESSION_SECRET | Yes | Session secret
+
+### Options
+
+`database_url`, and `database_logfile` options can be passed to `TentAdmin.new` to override the coresponding ENV
 
 ## Contributing
 

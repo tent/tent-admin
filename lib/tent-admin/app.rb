@@ -1,4 +1,5 @@
 require 'rack-putty'
+require 'omniauth-tent'
 
 module TentAdmin
   class App
@@ -6,6 +7,7 @@ module TentAdmin
     require 'tent-admin/app/serialize_response'
     require 'tent-admin/app/asset_server'
     require 'tent-admin/app/render_view'
+    require 'tent-admin/app/authentication'
 
     def self.settings
       @settings ||= Hash.new
@@ -45,7 +47,31 @@ module TentAdmin
       b.use AssetServer
     end
 
+    match %r{\A/auth/tent(/callback)?} do |b|
+      b.use OmniAuth::Builder do
+        provider :tent, {
+          :get_app => AppLookup,
+          :on_app_created => AppCreate,
+          :app => {
+            :name => "Tent Admin",
+            :description => "Tent Server Admin App",
+            :url => ENV['URL'],
+            :redirect_uri => "#{ENV['URL'].sub(%r{/\Z}, '')}/auth/tent/callback",
+            :read_post_types => %w( https://tent.io/types/app/v0# ),
+            :write_post_types => %w( https://tent.io/types/app/v0# ),
+            :scopes => %w()
+          }
+        }
+      end
+      b.use OmniAuthCallback
+    end
+
+    get '/signout' do |b|
+      b.use Signout
+    end
+
     get %r{/((profile)|(apps))?} do |b|
+      b.use Authentication
       b.use MainApplication
       b.use RenderView
     end
