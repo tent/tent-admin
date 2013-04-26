@@ -8,12 +8,20 @@ module TentAdmin
         AssetNotFoundError = AssetServer::SprocketsHelpers::AssetNotFoundError
 
         attr_reader :env
-        def initialize(env, renderer)
-          @env, @renderer = env, renderer
+        def initialize(env, renderer, &block)
+          @env, @renderer, @block = env, renderer, block
         end
 
         def erb(view_name)
           @renderer.erb(view_name, binding)
+        end
+
+        def block_given?
+          !@block.nil? && @block.respond_to?(:call)
+        end
+
+        def yield
+          @block.call(self)
         end
 
         def sprockets_environment
@@ -60,7 +68,7 @@ module TentAdmin
         [status, headers, [body]]
       end
 
-      def erb(view_name, binding)
+      def erb(view_name, binding, &block)
         view_path = "#{@view_root}/#{view_name}.erb"
         return unless File.exists?(view_path)
 
@@ -71,11 +79,18 @@ module TentAdmin
       private
 
       def render(env)
-        erb(env['response.view'], template_binding(env))
+        if env['response.layout']
+          layout = env['response.layout']
+          view = env['response.view']
+          block = proc { |binding| erb(view, binding) }
+          erb(layout, template_binding(env, &block))
+        else
+          erb(env['response.view'], template_binding(env))
+        end
       end
 
-      def template_binding(env)
-        TempalteContext.new(env, self).instance_eval { binding }
+      def template_binding(env, &block)
+        TempalteContext.new(env, self, &block).instance_eval { binding }
       end
 
     end
