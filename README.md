@@ -35,6 +35,16 @@ createdb tent-admin
 DATABASE_URL=postgres://localhost/tent-admin bundle exec puma
 ```
 
+#### Heroku
+
+```
+heroku create --addons heroku-postgresql:dev
+heroku pg:promote $(heroku pg | head -1 | cut -f2 -d" ")
+heroku config:add STATUS_ASSET_MANIFEST='./public/assets/manifest.json' SESSION_SECRET=$(openssl rand -hex 16 | tr -d '\r\n')
+git push heroku master
+heroku open
+```
+
 ### ENV variables
 
 name | required | description
