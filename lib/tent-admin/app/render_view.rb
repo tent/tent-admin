@@ -82,7 +82,7 @@ module TentAdmin
         if env['response.layout']
           layout = env['response.layout']
           view = env['response.view']
-          block = proc { |binding| erb(view, binding) }
+          block = proc { |binding| erb(view, template_binding(env)) }
           erb(layout, template_binding(env, &block))
         else
           erb(env['response.view'], template_binding(env))
