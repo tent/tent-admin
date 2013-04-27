@@ -18,7 +18,10 @@ module TentAdmin
       self.class.settings.merge!(settings)
     end
 
-    AssetServer.asset_root = File.expand_path('../../assets', __FILE__) # lib/assets
+    AssetServer.asset_roots = [
+      File.expand_path('../../assets', __FILE__), # lib/assets
+      File.expand_path('../../../vendor/assets', __FILE__) # vendor/assets
+    ]
 
     include Rack::Putty::Router
 

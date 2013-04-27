@@ -22,7 +22,7 @@ module TentAdmin
       DEFAULT_MIME = 'application/octet-stream'.freeze
 
       class << self
-        attr_accessor :asset_root, :logfile
+        attr_accessor :asset_roots, :logfile
       end
 
       def self.sprockets_environment
@@ -35,8 +35,10 @@ module TentAdmin
           end
 
           paths = %w[ javascripts stylesheets images fonts ]
-          paths.each do |path|
-            environment.append_path(File.join(@asset_root, path))
+          @asset_roots.each do |asset_root|
+            paths.each do |path|
+              environment.append_path(File.join(asset_root, path))
+            end
           end
 
           MarblesJS.sprockets_setup(environment)

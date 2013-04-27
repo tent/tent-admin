@@ -10,7 +10,7 @@ namespace :assets do
     require 'rack-putty'
     require 'tent-admin/app/middleware'
     require 'tent-admin/app/asset_server'
-    TentAdmin::AssetServer.asset_root = 'lib/assets'
+    TentAdmin::AssetServer.asset_roots = %w( lib/assets vendor/assets )
     TentAdmin::AssetServer.logfile = '/dev/null'
     t.environment = TentAdmin::AssetServer.sprockets_environment
 
