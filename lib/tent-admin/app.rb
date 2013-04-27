@@ -58,8 +58,17 @@ module TentAdmin
             :description => "Tent Server Admin App",
             :url => ENV['URL'],
             :redirect_uri => "#{ENV['URL'].sub(%r{/\Z}, '')}/auth/tent/callback",
-            :read_post_types => %w( https://tent.io/types/app/v0# ),
-            :write_post_types => %w( https://tent.io/types/meta/v0# https://tent.io/types/app/v0# ),
+            :read_post_types => %w(
+              https://tent.io/types/app/v0#
+              https://tent.io/types/app-auth/v0#
+              https://tent.io/types/credentials/v0#
+            ),
+            :write_post_types => %w(
+              https://tent.io/types/app/v0#
+              https://tent.io/types/app-auth/v0#
+              https://tent.io/types/credentials/v0#
+              https://tent.io/types/meta/v0#
+            ),
             :scopes => %w()
           }
         }

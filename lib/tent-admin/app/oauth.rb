@@ -94,7 +94,9 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
       end
 
       def set_state(env, key, val)
-        (env['rack.session']['oauth.keys'] ||= []) << key.to_s
+        unless (env['rack.session']['oauth.keys'] ||= []).include?(key.to_s)
+          env['rack.session']['oauth.keys'] << key.to_s
+        end
         env['rack.session'][key.to_s] = val
       end
 
@@ -110,7 +112,6 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
 
       def success!(env, app_auth, credentials = nil)
         user = current_user(env)
-        p ['success!']
 
         unless credentials
           # Fetch app auth credentials
@@ -126,7 +127,21 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
 
             credentials = Utils::Hash.symbolize_keys(res.body)
           else
-            failure!(:server_error, env)
+            # Credentials post doesn't exist, so create one
+            require 'securerandom'
+            data = {
+              :type => CREDENTIALS_POST_TYPE.to_s,
+              :mentions => [{ :entity => app_auth[:entity], :post => app_auth[:id] }],
+              :content => {
+                :hawk_key => SecureRandom.hex(32),
+                :hawk_algorithm => 'sha256'
+              }
+            }
+            res = user.client.post.create(data)
+            unless res.success?
+              failure!(:server_error, env)
+            end
+            credentials = Utils::Hash.symbolize_keys(res.body)
           end
         end
 
@@ -141,7 +156,6 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
       end
 
       def failure!(code, env)
-        p ['failure!']
         location = oauth_redirect_uri(env)
         message = FAILURE_CODE[code] || code.to_s
 
@@ -218,8 +232,9 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
             :read => read_types,
             :write => write_types
           }
-          auth_res = user.client.post.update(app_auth['entity'], app_auth['id'], data)
+          auth_res = user.client.post.update(app_auth[:entity], app_auth[:id], data)
           failure!(:server_error, env) unless auth_res.success?
+          app_auth = Utils::Hash.symbolize_keys(auth_res.body)
         else
           data = {
             :type => APP_AUTH_POST_TYPE,
@@ -233,12 +248,13 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
           }
           auth_res = user.client.post.create(data)
           failure!(:server_error, env) unless auth_res.success?
-          app_auth = auth_res.body
+          app_auth = Utils::Hash.symbolize_keys(auth_res.body)
 
           # Add app auth mention to app
           data = Utils::Hash.dup(app)
-          data[:mentions] << { :entity => app_auth['entity'], :post => app_auth['id'] }
-          app_res = user.client.post.update(app['entity'], app['id'], data)
+          data[:version] = { :parents => [{ :version => app[:version][:id] }] }
+          data[:mentions] << { :entity => app_auth[:entity], :post => app_auth[:id] }
+          app_res = user.client.post.update(app[:entity], app[:id], data)
           failure!(:server_error, env) unless app_res.success?
         end
 

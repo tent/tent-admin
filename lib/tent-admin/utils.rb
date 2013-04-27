@@ -40,7 +40,7 @@ module TentAdmin
           case item
           when ::Hash
             item.inject(::Hash.new) do |new_hash, (k,v)|
-              new_key = method ? k.send(method) : block.call(key)
+              new_key = method ? k.send(method) : block.call(k)
               new_hash[new_key] = transform_keys(v, method, &block).first
               new_hash
             end
