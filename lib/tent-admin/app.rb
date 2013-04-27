@@ -8,6 +8,7 @@ module TentAdmin
     require 'tent-admin/app/asset_server'
     require 'tent-admin/app/render_view'
     require 'tent-admin/app/authentication'
+    require 'tent-admin/app/oauth'
 
     def self.settings
       @settings ||= Hash.new
@@ -64,6 +65,17 @@ module TentAdmin
         }
       end
       b.use OmniAuthCallback
+    end
+
+    get '/oauth' do |b|
+      b.use Authentication
+      b.use OAuthConfirm
+      b.use RenderView
+    end
+
+    post '/oauth' do |b|
+      b.use Authentication
+      b.use OAuthAuthorize
     end
 
     get '/signout' do |b|

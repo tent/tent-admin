@@ -5,6 +5,10 @@ module TentAdmin
     module Hash
       extend self
 
+      def dup(hash)
+        transform_keys(hash, nil) { |k| k }.first
+      end
+
       def slice(hash, *keys)
         keys.each_with_object(hash.class.new) { |k, new_hash|
           new_hash[k] = hash[k] if hash.has_key?(k)
@@ -31,16 +35,17 @@ module TentAdmin
         hash.replace(symbolize_keys(hash))
       end
 
-      def transform_keys(*items, method)
+      def transform_keys(*items, method, &block)
         items.map do |item|
           case item
           when ::Hash
             item.inject(::Hash.new) do |new_hash, (k,v)|
-              new_hash[k.send(method)] = transform_keys(v, method).first
+              new_key = method ? k.send(method) : block.call(key)
+              new_hash[new_key] = transform_keys(v, method, &block).first
               new_hash
             end
           when ::Array
-            item.map { |i| transform_keys(i, method).first }
+            item.map { |i| transform_keys(i, method, &block).first }
           else
             item
           end

@@ -45,7 +45,13 @@ module TentAdmin
       end
 
       def server_meta_post
-        @server_meta_post ||= client.server_meta_post
+        @server_meta_post ||= begin
+          post = client.server_meta_post
+          if post && post['content']['entity'] != entity
+            self.update(:entity => post['content']['entity'])
+          end
+          post
+        end
       end
 
       ##

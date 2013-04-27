@@ -3,17 +3,23 @@ module TentAdmin
     class Middleware < Rack::Putty::Middleware
 
       class Halt < StandardError
-        attr_accessor :code, :message
-        def initialize(code, message)
+        attr_accessor :code, :message, :headers, :body
+        def initialize(code, message=nil)
           super(message)
           @code, @message = code, message
+          @headers = { 'Content-Type' => 'text/plain' }
+          @body = message.to_s
+        end
+
+        def to_response
+          [code, headers, [body]]
         end
       end
 
       def call(env)
         super
       rescue Halt => e
-        [e.code, { 'Content-Type' => 'text/plain' }, [e.message.to_s]]
+        e.to_response
       end
 
       def current_user(env)
@@ -21,8 +27,18 @@ module TentAdmin
         env['current_user'] ||= Model::User.first(:id => id)
       end
 
+      def halt!(code, message)
+        raise Halt.new(code, message)
+      end
+
       def redirect(location)
         [302, { 'Location' => location }, []]
+      end
+
+      def redirect!(location)
+        halt = Halt.new(302)
+        halt.headers = { 'Location' => location.to_s }
+        raise halt
       end
 
     end
