@@ -41,6 +41,8 @@
       </div>
     </div>
 
-    <script type='application/javascript' src='<%= asset_path('application.js') %>'></script>
+    <% unless block_given? %>
+      <script type='application/javascript' src='<%= asset_path('application.js') %>'></script>
+    <% end %>
   </body>
 </html>
