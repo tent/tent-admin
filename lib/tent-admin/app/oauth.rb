@@ -131,7 +131,7 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
             require 'securerandom'
             data = {
               :type => CREDENTIALS_POST_TYPE.to_s,
-              :mentions => [{ :entity => app_auth[:entity], :post => app_auth[:id] }],
+              :mentions => [{ :post => app_auth[:id], :type => APP_AUTH_POST_TYPE.to_s, :public => false }],
               :content => {
                 :hawk_key => SecureRandom.hex(32),
                 :hawk_algorithm => 'sha256'
@@ -253,7 +253,8 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
           # Add app auth mention to app
           data = Utils::Hash.dup(app)
           data[:version] = { :parents => [{ :version => app[:version][:id] }] }
-          data[:mentions] << { :entity => app_auth[:entity], :post => app_auth[:id] }
+          data[:mentions].delete_if { |m| TentType.new(m[:type]).base == APP_AUTH_POST_TYPE.base }
+          data[:mentions] << { :post => app_auth[:id], :type => APP_AUTH_POST_TYPE.to_s, :public => false }
           app_res = user.client.post.update(app[:entity], app[:id], data)
           failure!(:server_error, env) unless app_res.success?
         end
