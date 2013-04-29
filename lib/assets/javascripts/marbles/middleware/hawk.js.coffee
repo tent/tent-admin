@@ -16,10 +16,14 @@ Marbles.HTTP.Middleware.Hawk = class HawkMiddleware
     @options = options
 
   processRequest: (http) ->
-    header = hawk.client.header(http.method, http.url, _.extend({
-        credentials: @credentials
-        payload: http.body
-      }, @options)
+    options = {
+      credentials: @credentials
+    }
+    if http.body
+      options.payload = http.body
+      options.contentType = http.request.request_headers['Content-Type']
+
+    header = hawk.client.header(http.url, http.method, _.extend(options, @options)
     ).field
     return unless header
 
