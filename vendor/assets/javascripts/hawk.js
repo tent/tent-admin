@@ -266,7 +266,7 @@ if (typeof module !== "undefined" && module.exports) {
 
 
     exports.calculateTsMac = function (ts, credentials) {
-        var hash = CryptoJS['Hmac' + credentials.algorithm.toUpperCase()]('hawk.' + hawk.crypto.headerVersion + '.ts\n' + ts + '\n', credentials.key);
+        var hash = CryptoJS['Hmac' + credentials.algorithm.toUpperCase()]('hawk.' + exports.headerVersion + '.ts\n' + ts + '\n', credentials.key);
         return hash.toString(CryptoJS.enc.Base64);
     };
 
@@ -431,7 +431,7 @@ if (typeof module !== "undefined" && module.exports) {
             // Parse HTTP WWW-Authenticate header
 
             var attributes = Utils.parseAuthorizationHeader(res.headers['www-authenticate'], ['ts', 'tsm', 'error']);
-            if (attributes instanceof Error) {
+            if (!attributes) {
                 return false;
             }
 
@@ -440,6 +440,7 @@ if (typeof module !== "undefined" && module.exports) {
                 if (tsm !== attributes.tsm) {
                     return false;
                 }
+                Utils.setNtpOffset(attributes.ts - Math.floor(Date.now() / 1000));     // Keep offset at 1 second precision
             }
         }
 
@@ -452,7 +453,7 @@ if (typeof module !== "undefined" && module.exports) {
         }
 
         var attributes = Utils.parseAuthorizationHeader(res.headers['server-authorization'], ['mac', 'ext', 'hash']);
-        if (attributes instanceof Error) {
+        if (!attributes) {
             return false;
         }
 
