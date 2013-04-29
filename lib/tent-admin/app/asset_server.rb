@@ -52,7 +52,7 @@ module TentAdmin
       def initialize(app, options = {})
         super
 
-        @public_dir = @options[:public_dir] || App.settings[:public_dir] || File.expand_path('../../../../public', __FILE__) # lib/../public
+        @public_dir = @options[:public_dir] || App.settings[:public_dir] || File.expand_path('../../../../public/assets', __FILE__) # lib/../public/assets
 
         @sprockets_environment = self.class.sprockets_environment
       end
@@ -62,7 +62,7 @@ module TentAdmin
         compiled_path = File.join(@public_dir, asset_name)
 
         if File.exists?(compiled_path)
-          [200, { 'Content-Type' => asset_mime_type(asset_name) }, [File.read(path)]]
+          [200, { 'Content-Type' => asset_mime_type(asset_name) }, [File.read(compiled_path)]]
         else
           new_env = env.clone
           new_env["PATH_INFO"] = env["REQUEST_PATH"].sub(%r{\A/assets}, '')
