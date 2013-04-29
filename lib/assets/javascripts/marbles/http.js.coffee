@@ -75,6 +75,8 @@ Marbles.HTTP = class HTTP
     @request.send(@body)
 
   class @Request
+    request_headers: {}
+
     constructor: ->
       @callbacks = {}
 
@@ -99,7 +101,9 @@ Marbles.HTTP = class HTTP
       return if @xmlhttp.readyState != 4
       @trigger 'complete'
 
-    setHeader: (key, val) => @xmlhttp.setRequestHeader(key,val)
+    setHeader: (key, val) =>
+      @request_headers[key] = val
+      @xmlhttp.setRequestHeader(key,val)
 
     on: (event_name, fn) =>
       @callbacks[event_name] ||= []
