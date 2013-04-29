@@ -1,4 +1,19 @@
+/*
+    HTTP Hawk Authentication Scheme
+    Copyright (c) 2012-2013, Eran Hammer <eran@hueniverse.com>
+    MIT Licensed
+*/
+
+// Declare namespace
+
 var hawk = {};
+
+
+// Export if used as a module
+
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = hawk;
+}
 
 (function() {
   hawk.utils = {
