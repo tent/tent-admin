@@ -19,7 +19,7 @@ Marbles.HTTP.Middleware.Hawk = class HawkMiddleware
     options = {
       credentials: @credentials
     }
-    if http.body
+    if http.body && !http.multipart
       options.payload = http.body
       options.contentType = http.request.request_headers['Content-Type']
 
