@@ -1,6 +1,6 @@
 TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
   @model_name: 'basic_profile'
-  @id_mapping_scope: ['id', 'entity']
+  @id_mapping_scope: ['entity']
 
   @post_type: new TentClient.PostType('https://tent.io/types/basic-profile/v0#')
 

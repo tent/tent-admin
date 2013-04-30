@@ -8,7 +8,7 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
 
     @on 'ready', @bindForm
 
-    @basic_profile = new TentAdmin.Models.BasicProfile
+    @basic_profile = TentAdmin.Models.BasicProfile.find(entity: TentAdmin.config.current_user.entity, fetch: false) || new TentAdmin.Models.BasicProfile
     @basic_profile.on 'fetch:success', => @render()
     @basic_profile.on 'change:avatar_url', => @render()
     @basic_profile.on 'save:failure', @saveFailure
