@@ -7,9 +7,13 @@ TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
   @content_fields = ['name', 'bio', 'location', 'gender', 'birthdate', 'website_url']
 
   constructor: ->
+    @on 'change:avatar', @avatarUpdated
+
     super
 
-    @on 'change:avatar', @avatarUpdated
+  parseAttributes: =>
+    super
+    @attachmentsUpdated(@get('attachments'))
 
   fetch: (options = {}) =>
     xhr = null
@@ -80,6 +84,18 @@ TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
       reader.readAsDataURL(value)
     else
       @set('avatar_url', null)
+
+  attachmentsUpdated: (value) =>
+    return unless value && value.length
+    return unless avatar_attachment = _.find value, (attachment) =>
+      attachment.category == 'avatar'
+    url = TentAdmin.tent_client.getNamedUrl('post_attachment',
+      entity: @get('entity')
+      post: @get('id')
+      version: @get('version.id')
+      name: avatar_attachment.name
+    )
+    @set('avatar_url', url)
 
   buildAttachments: =>
     return [] unless avatar = @get('avatar')

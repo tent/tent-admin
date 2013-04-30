@@ -7,6 +7,17 @@ class @TentClient
     new Marbles.HTTP.Middleware.Hawk(credentials: TentAdmin.config.current_user.credentials)
   ]
 
+  @preferredServer: (server_meta_post) =>
+    servers = _.sortBy(server_meta_post.content.servers, 'preference')
+    servers[0]
+
+  @namedUrl: (server, name, params = {}) ->
+    server?.urls[name]?.replace URI_TEMPLATE_REGEX, =>
+      param = params[RegExp.$1] || ''
+      delete params[RegExp.$1]
+
+      encodeURIComponent(param)
+
   class @PostType
     constructor: (type_uri) ->
       @version = 0
@@ -36,11 +47,7 @@ class @TentClient
       @current_server = @servers.shift()
 
     namedUrl: (name, params = {}) =>
-      @current_server?.urls[name]?.replace URI_TEMPLATE_REGEX, =>
-        param = params[RegExp.$1] || ''
-        delete params[RegExp.$1]
-
-        encodeURIComponent(param)
+      TentClient.namedUrl(@current_server, name, params)
 
     runRequest: (method, _url, params, body, headers, middleware, _callback) =>
       middleware ?= []
@@ -91,6 +98,28 @@ class @TentClient
 
   mediaType: (name) =>
     @constructor.HTTP.MEDIA_TYPES[name]
+
+  getNamedUrl: (url, params = {}) =>
+    @constructor.namedUrl(@constructor.preferredServer(TentAdmin.config.current_user.server_meta_post), url, params)
+
+  getSignedUrl: (url, params = {}) =>
+    unless url.match(/^[a-z]+:\/\//i)
+      @getNamedUrl(url, params)
+
+    _credentials = TentAdmin.config.current_user.credentials
+    bewit = hawk.client.getBewit(
+      url,
+      credentials: {
+        id: _credentials.id,
+        key: _credentials.hawk_key,
+        algorithm: _credentials.hawk_algorithm
+      },
+      ttlSec: 86400 # 24 hours
+    )
+
+    uri = new Marbles.HTTP.URI(url)
+    uri.mergeParams(bewit: bewit)
+    uri.toString()
 
   createPost: (args = {}) =>
     [params, headers, body, attachments, callback] = [_.clone(args.params || {}), args.headers || {}, args.body, args.attachments || [], args.callback]
