@@ -2,23 +2,24 @@
 
 <form class='form-horizontal'>
   <div class="control-group">
-    <label class="control-label" for="name">name</label>
+    <% if (basic_profile.get('avatar_url')) { %>
+      <img class="avatar avatar-large profile-avatar" src="<%= basic_profile.get('avatar_url') %>" />
+    <% } else { %>
+      <label class="control-label" for="basic_profile[avatar]">avatar</label>
+    <% } %>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="name" type="text" value="<%= basic_profile.get('content.name') %>">
-        <div class="add-on valid">
-          <i>&nbsp;</i>
-        </div>
+        <input name="basic_profile[avatar]" type="file">
       </div>
       <span class="help-inline"></span>
     </div>
   </div>
-  
+
   <div class="control-group">
-    <label class="control-label" for="avatar">avatar</label>
+    <label class="control-label" for="basic_profile[name]">name</label>
     <div class="controls">
       <div class="input-append">
-        <input style="margin-right:13px;" name="avatar_url" type="file">
+        <input class="input input-xlarge" name="basic_profile[name]" type="text" value="<%= basic_profile.get('content.name') %>">
         <div class="add-on valid">
           <i>&nbsp;</i>
         </div>
@@ -29,10 +30,10 @@
 
   
   <div class="control-group">
-    <label class="control-label" for="birthdate">birthdate</label>
+    <label class="control-label" for="basic_profile[birthdate]">birthdate</label>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="birthdate" type="text" value="<%= basic_profile.get('content.birthdate') %>">
+        <input class="input input-xlarge" name="basic_profile[birthdate]" type="text" value="<%= basic_profile.get('content.birthdate') %>">
         <div class="add-on valid">
           <i>&nbsp;</i>
         </div>
@@ -43,10 +44,10 @@
 
   
   <div class="control-group">
-    <label class="control-label" for="location">location</label>
+    <label class="control-label" for="basic_profile[location]">location</label>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="location" type="text" value="<%= basic_profile.get('content.location') %>">
+        <input class="input input-xlarge" name="basic_profile[location]" type="text" value="<%= basic_profile.get('content.location') %>">
         <div class="add-on valid">
           <i>&nbsp;</i>
         </div>
@@ -56,10 +57,10 @@
   </div>
   
   <div class="control-group">
-    <label class="control-label" for="gender">gender</label>
+    <label class="control-label" for="basic_profile[gender]">gender</label>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="gender" type="text" value="<%= basic_profile.get('content.gender') %>">
+        <input class="input input-xlarge" name="basic_profile[gender]" type="text" value="<%= basic_profile.get('content.gender') %>">
         <div class="add-on valid">
           <i>&nbsp;</i>
         </div>
@@ -69,7 +70,7 @@
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="bio">Bio</label>
+    <label class="control-label" for="basic_profile[bio]">Bio</label>
     <div class="controls">
       <div class="input-append">
         <textarea name='bio' class='input input-xlarge' rows='3'><%= basic_profile.get('content.bio') %></textarea>
@@ -82,10 +83,10 @@
   </div>
   
   <div class="control-group">
-    <label class="control-label" for="website_url">website url</label>
+    <label class="control-label" for="basic_profile[website_url]">website url</label>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="website_url" type="text" value="<%= basic_profile.get('content.website_url') %>">
+        <input class="input input-xlarge" name="basic_profile[website_url]" type="text" value="<%= basic_profile.get('content.website_url') %>">
         <div class="add-on valid">
           <i>&nbsp;</i>
         </div>
@@ -95,6 +96,6 @@
   </div>
 
   <div class="form-actions">
-    <input class="btn btn-success" type="submit" value="Save" disabled>
+    <input class="btn btn-success" type="submit" value="Save">
   </div>
 </form>

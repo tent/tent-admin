@@ -7,6 +7,8 @@ URI = Marbles.HTTP.URI
 Marbles.HTTP = class HTTP
   @URI = URI
 
+  @MULTIPART_BOUNDARY: "-----------REQUEST_PART"
+
   @active_requests: {}
   MAX_NUM_RETRIES: 3
 
@@ -52,9 +54,32 @@ Marbles.HTTP = class HTTP
     @request.open(@method, @url)
     @setHeaders(@headers) if @headers
 
-    for middleware in @middleware
-      middleware.processRequest?(@)
+    ##
+    # Multipart Request if body is an array
+    # eg. body = [['somefile', new Blob(...), 'somefile.extention'], ...]
+    if @body && typeof @body is 'object' && @body.length
+      @setHeader('Content-Type', "multipart/form-data; boundary=#{@constructor.MULTIPART_BOUNDARY}")
+      @multipart = true
 
+    num_pending_async_callbacks = 0
+    async_complete = =>
+      num_pending_async_callbacks -= 1
+      if num_pending_async_callbacks == 0
+        @finalizeSendRequest()
+
+    for middleware in @middleware
+      fn = middleware.processRequest
+      continue unless typeof fn is 'function'
+      if fn.length == 2
+        # Assume async
+        num_pending_async_callbacks += 1
+        fn(@, async_complete)
+      else
+        fn(@)
+
+    @finalizeSendRequest() unless num_pending_async_callbacks
+
+  finalizeSendRequest: =>
     @request.on 'complete', (xhr) =>
       delete HTTP.active_requests[@key] if @key
 
@@ -71,6 +96,16 @@ Marbles.HTTP = class HTTP
       for fn in @callbacks
         continue unless typeof fn == 'function'
         fn(@response_data, xhr)
+
+    if @multipart
+      form_data = new FormData
+      for part in @body
+        [name, blob, filename] = part
+        console.log('multipart part', part, name, blob, filename)
+        form_data.append(name, blob, filename || name)
+      @body = form_data
+
+      # TODO: set multipart boundary
 
     @request.send(@body)
 

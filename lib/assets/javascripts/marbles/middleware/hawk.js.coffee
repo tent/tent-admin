@@ -19,12 +19,12 @@ Marbles.HTTP.Middleware.Hawk = class HawkMiddleware
     options = {
       credentials: @credentials
     }
-    if http.body
+    if http.body && !http.multipart
+      # TODO: handle signing multipart requests
       options.payload = http.body
       options.contentType = http.request.request_headers['Content-Type']
 
-    header = hawk.client.header(http.url, http.method, _.extend(options, @options)
-    ).field
+    header = hawk.client.header(http.url, http.method, _.extend(options, @options)).field
     return unless header
 
     http.setHeader('Authorization', header)

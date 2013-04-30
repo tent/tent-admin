@@ -79,6 +79,7 @@ class @TentClient
 
     @post = {
       create: @createPost
+      update: @updatePost
       get: @getPost
       mentions: @getPostMentions
       versions: @getPostVersions
@@ -92,14 +93,48 @@ class @TentClient
     @constructor.HTTP.MEDIA_TYPES[name]
 
   createPost: (args = {}) =>
-    [params, headers, body, callback] = [_.clone(args.params || {}), args.headers || {}, args.body, args.callback]
+    [params, headers, body, attachments, callback] = [_.clone(args.params || {}), args.headers || {}, args.body, args.attachments || [], args.callback]
 
     unless body.type
       throw new Error("type member of body is required! Got \"#{body.type}\"")
 
-    headers['Content-Type'] = "#{@mediaType('post')}; type=\"#{body.type}\""
+    media_type = "#{@mediaType('post')}; type=\"#{body.type}\""
 
+    if attachments.length
+      # multipart
+      body = attachments.unshift(['post.json', new Blob([body], { type: media_type }), 'post.json'])
+    else
+      headers['Content-Type'] = media_type
+
+    headers.Accept = media_type
     @runRequest('POST', 'new_post', params, body, headers, null, callback)
+
+  updatePost: (args = {}) =>
+    [params, headers, body, attachments, callback] = [_.clone(args.params || {}), args.headers || {}, args.body, args.attachments || [], args.callback]
+
+    unless body.type
+      throw new Error("type member of body is required! Got \"#{body.type}\"")
+
+    unless params.hasOwnProperty('entity')
+      params.entity = @entity
+
+    unless params.hasOwnProperty('post')
+      params.post = body.id
+
+    unless params.entity && params.post
+      throw new Error("entity and post members of params are required! Got \"#{params.entity}\" and \"#{params.post}\"")
+
+    media_type = "#{@mediaType('post')}; type=\"#{body.type}\""
+
+    if attachments.length
+      # multipart
+      attachments.unshift(['post', new Blob([body], { type: media_type }), 'post.json'])
+      body = attachments
+    else
+      headers['Content-Type'] = media_type
+
+    headers.Accept = media_type
+    @runRequest('PUT', 'post', params, body, headers, null, callback)
 
   getPost: (args = {}) =>
     [params, headers, callback] = [_.clone(args.params || {}), args.headers || {}, args.callback]
