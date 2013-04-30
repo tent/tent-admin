@@ -9,6 +9,8 @@ Marbles.HTTP = class HTTP
 
   @MULTIPART_BOUNDARY: "-----------REQUEST_PART"
 
+  @MAX_BLOB_SIZE: 2000000 # 2MB
+
   @active_requests: {}
   MAX_NUM_RETRIES: 3
 
@@ -61,23 +63,52 @@ Marbles.HTTP = class HTTP
       @setHeader('Content-Type', "multipart/form-data; boundary=#{@constructor.MULTIPART_BOUNDARY}")
       @multipart = true
 
-    num_pending_async_callbacks = 0
-    async_complete = =>
-      num_pending_async_callbacks -= 1
-      if num_pending_async_callbacks == 0
+      @buildMultipartRequestBody =>
+        # @setHeader("Content-Length", @body.length)
+        @runRequestMiddleware()
         @finalizeSendRequest()
+    else
+      @runRequestMiddleware()
+      @finalizeSendRequest()
 
+  readAsBinaryString: (blob, callback) =>
+    reader = new FileReader
+    reader.onload = (e) =>
+      callback(e.target.result)
+    reader.readAsBinaryString(blob)
+
+  buildMultipartRequestBody: (onComplete) =>
+    start_boundary = "--#{@constructor.MULTIPART_BOUNDARY}\r\n"
+    close_boundary = "--#{@constructor.MULTIPART_BOUNDARY}--"
+    parts = []
+
+    num_pending_parts = @body.length
+    add_part = (data) =>
+      parts.push(data)
+      num_pending_parts -= 1
+
+      if num_pending_parts == 0
+        @body = start_boundary
+        @body += parts.join(start_boundary)
+        @body += close_boundary
+        onComplete()
+
+    for part in @body
+      do (part) =>
+        [name, blob, filename] = part
+        return add_part("") if blob.size > @constructor.MAX_BLOB_SIZE
+        data = ""
+        data += "Content-Disposition: form-data; name=\"#{name}\"; filename=\"#{filename}\"\r\n"
+        data += "Content-Type: #{blob.type}\r\n"
+        data += "Content-Length: #{blob.size}\r\n"
+        data += "\r\n"
+        @readAsBinaryString blob, (binary) =>
+          data += "#{binary}\r\n"
+          add_part(data)
+
+  runRequestMiddleware: =>
     for middleware in @middleware
-      fn = middleware.processRequest
-      continue unless typeof fn is 'function'
-      if fn.length == 2
-        # Assume async
-        num_pending_async_callbacks += 1
-        fn(@, async_complete)
-      else
-        fn(@)
-
-    @finalizeSendRequest() unless num_pending_async_callbacks
+      middleware.processRequest?(@)
 
   finalizeSendRequest: =>
     @request.on 'complete', (xhr) =>
@@ -98,16 +129,9 @@ Marbles.HTTP = class HTTP
         fn(@response_data, xhr)
 
     if @multipart
-      form_data = new FormData
-      for part in @body
-        [name, blob, filename] = part
-        console.log('multipart part', part, name, blob, filename)
-        form_data.append(name, blob, filename || name)
-      @body = form_data
-
-      # TODO: set multipart boundary
-
-    @request.send(@body)
+      @request.sendAsBinary(@body)
+    else
+      @request.send(@body)
 
   class @Request
     request_headers: {}
@@ -154,6 +178,13 @@ Marbles.HTTP = class HTTP
           console?.log fn
 
     open: (method, url) => @xmlhttp.open(method, url, true)
+
+    sendAsBinary: (data) =>
+      return @trigger('complete') if @xmlhttp.readyState == 4
+      if typeof @xmlhttp.sendAsBinary is 'function'
+        @xmlhttp.sendAsBinary(data)
+      else
+        @xmlhttp.send(data)
 
     send: (data) =>
       return @trigger('complete') if @xmlhttp.readyState == 4
