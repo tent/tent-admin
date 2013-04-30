@@ -19,8 +19,7 @@ Marbles.HTTP.Middleware.Hawk = class HawkMiddleware
     options = {
       credentials: @credentials
     }
-    if http.body && !http.multipart
-      # TODO: handle signing multipart requests
+    if http.body
       options.payload = http.body
       options.contentType = http.request.request_headers['Content-Type']
 
