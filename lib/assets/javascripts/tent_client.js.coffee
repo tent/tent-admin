@@ -102,7 +102,7 @@ class @TentClient
 
     if attachments.length
       # multipart
-      body = attachments.unshift(['post.json', new Blob([body], { type: media_type }), 'post.json'])
+      body = attachments.unshift(['post.json', new Blob([JSON.stringify(body)], { type: media_type }), 'post.json'])
     else
       headers['Content-Type'] = media_type
 
@@ -128,7 +128,7 @@ class @TentClient
 
     if attachments.length
       # multipart
-      attachments.unshift(['post', new Blob([body], { type: media_type }), 'post.json'])
+      attachments.unshift(['post', new Blob([JSON.stringify(body)], { type: media_type }), 'post.json'])
       body = attachments
     else
       headers['Content-Type'] = media_type

@@ -1,5 +1,9 @@
 <h1 class='page-header'>Profile <small><%= current_user.entity %></small></h1>
 
+<% if (flash_message) { %>
+  <div class='alert alert-<%- flash_message.type %>'><%- flash_message.text %></div>
+<% } %>
+
 <form class='form-horizontal'>
   <div class="control-group">
     <% if (basic_profile.get('avatar_url')) { %>
@@ -11,7 +15,6 @@
       <div class="input-append">
         <input name="basic_profile[avatar]" type="file">
       </div>
-      <span class="help-inline"></span>
     </div>
   </div>
 
@@ -20,11 +23,7 @@
     <div class="controls">
       <div class="input-append">
         <input class="input input-xlarge" name="basic_profile[name]" type="text" value="<%= basic_profile.get('content.name') %>">
-        <div class="add-on valid">
-          <i>&nbsp;</i>
-        </div>
       </div>
-      <span class="help-inline"></span>
     </div>
   </div>
 
@@ -34,11 +33,7 @@
     <div class="controls">
       <div class="input-append">
         <input class="input input-xlarge" name="basic_profile[birthdate]" type="text" value="<%= basic_profile.get('content.birthdate') %>">
-        <div class="add-on valid">
-          <i>&nbsp;</i>
-        </div>
       </div>
-      <span class="help-inline"></span>
     </div>
   </div>
 
@@ -48,11 +43,7 @@
     <div class="controls">
       <div class="input-append">
         <input class="input input-xlarge" name="basic_profile[location]" type="text" value="<%= basic_profile.get('content.location') %>">
-        <div class="add-on valid">
-          <i>&nbsp;</i>
-        </div>
       </div>
-      <span class="help-inline"></span>
     </div>
   </div>
   
@@ -61,11 +52,7 @@
     <div class="controls">
       <div class="input-append">
         <input class="input input-xlarge" name="basic_profile[gender]" type="text" value="<%= basic_profile.get('content.gender') %>">
-        <div class="add-on valid">
-          <i>&nbsp;</i>
-        </div>
       </div>
-      <span class="help-inline"></span>
     </div>
   </div>
 
@@ -74,11 +61,7 @@
     <div class="controls">
       <div class="input-append">
         <textarea name='bio' class='input input-xlarge' rows='3'><%= basic_profile.get('content.bio') %></textarea>
-        <div class="add-on valid">
-          <i>&nbsp;</i>
-        </div>
       </div>
-      <span class="help-inline"></span>
     </div>
   </div>
   
@@ -87,15 +70,11 @@
     <div class="controls">
       <div class="input-append">
         <input class="input input-xlarge" name="basic_profile[website_url]" type="text" value="<%= basic_profile.get('content.website_url') %>">
-        <div class="add-on valid">
-          <i>&nbsp;</i>
-        </div>
       </div>
-      <span class="help-inline"></span>
     </div>
   </div>
 
   <div class="form-actions">
-    <input class="btn btn-success" type="submit" value="Save">
+    <input class="btn btn-success" type="submit" value="Save" disabled>
   </div>
 </form>

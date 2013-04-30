@@ -11,13 +11,24 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
     @basic_profile = new TentAdmin.Models.BasicProfile
     @basic_profile.on 'fetch:success', => @render()
     @basic_profile.on 'change:avatar_url', => @render()
+    @basic_profile.on 'save:failure', @saveFailure
+    @basic_profile.on 'save:success', @saveSuccess
     @basic_profile.fetch()
 
     @render()
 
+  enableSubmit: =>
+    @elements.form_submit.disabled = false
+
+  disableSubmit: =>
+    @elements.form_submit.disabled = true
+
   bindForm: =>
     @elements.form = Marbles.DOM.querySelector('form', @el)
     Marbles.DOM.on(@elements.form, 'submit', @saveForm)
+
+    @elements.form_submit = Marbles.DOM.querySelector('[type=submit]', @elements.form)
+    @enableSubmit()
 
     @elements.avatar_input = Marbles.DOM.querySelector('[type=file]', @elements.form)
     Marbles.DOM.on(@elements.avatar_input, 'change', @avatarSelected)
@@ -27,6 +38,12 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
     avatar = data['basic_profile[avatar]']?[0]
     return unless avatar
     @basic_profile.set('avatar', avatar)
+
+  saveFailure: (data, xhr) =>
+    @render(@context flash_message: { text: "Failed to save: #{data.error}", type: 'error' })
+
+  saveSuccess: (basic_profile, xhr) =>
+    @render(@context flash_message: { text: "Saved!", type: 'success' })
 
   saveForm: (e) =>
     e?.preventDefault()
@@ -43,10 +60,11 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
     for key, val of basic_profile_data
       @basic_profile.set("content.#{key}", val)
 
+    @disableSubmit()
     @basic_profile.save()
 
-  context: (opts = {}) =>
-    _.extend {}, TentAdmin.config, {
+  context: (additional_data = {}) =>
+    _.extend { flash_message: null }, TentAdmin.config, {
       basic_profile: @basic_profile
-    }
+    }, additional_data
 

@@ -15,15 +15,12 @@ TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
     xhr = null
 
     success = =>
-      console.log('fetch:success')
       options.success?(@)
       @trigger('fetch:success', @, xhr)
     failure = =>
-      console.log('fetch:failure')
       options.failure?(@)
       @trigger('fetch:failure', @, xhr)
 
-    console.log('fetch')
     TentAdmin.tent_client.post.list(
       params:
         entity: TentAdmin.config.current_user.entity
@@ -40,7 +37,6 @@ TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
     )
 
   create: =>
-    console.log('create')
     data = @toTentJSON()
     attachments = @buildAttachments()
     delete data.attachments if attachments.length
@@ -50,24 +46,21 @@ TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
       success: =>
         @save(data, attachments)
       failure: =>
-        console.log('creating...')
         TentAdmin.tent_client.post.create(
           body: data
           attachments: attachments
           callback: (data, xhr) =>
-            return unless xhr.status in [200...300]
-            console.log('create success', data)
+            return @trigger('save:failure', data, xhr) unless xhr.status in [200...300]
             @parseAttributes(data)
+            @trigger('save:success', @, xhr)
         )
 
   save: (data, attachments) =>
-    console.log('update')
     unless @get('id')
       return @create()
 
-    console.log('updating...')
     data ?= @toTentJSON()
-    data.version = [{ parents: [{ version: @get('version.id') }] }]
+    data.version = { parents: [{ version: @get('version.id') }] }
     attachments ?= @buildAttachments()
     delete data.attachments if attachments.length
     TentAdmin.tent_client.post.update(
@@ -75,8 +68,8 @@ TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
       attachments: attachments
       callback: (data, xhr) =>
         return @trigger('save:failure', data, xhr) unless xhr.status in [200...300]
-        console.log('update success', data)
         @parseAttributes(data)
+        @trigger('save:success', @, xhr)
     )
 
   avatarUpdated: (value) =>
