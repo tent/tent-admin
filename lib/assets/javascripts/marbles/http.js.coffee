@@ -184,9 +184,15 @@ Marbles.HTTP = class HTTP
       if typeof @xmlhttp.sendAsBinary is 'function'
         @xmlhttp.sendAsBinary(data)
       else
-        @xmlhttp.send(data)
+        throw new Error("#{@xmlhttp.constructor.name}.prototype.sendAsBinary is not defined!")
 
     send: (data) =>
       return @trigger('complete') if @xmlhttp.readyState == 4
       @xmlhttp.send(data)
 
+XMLHttpRequest::sendAsBinary ?= (datastr) ->
+  byteValue = (x) -> x.charCodeAt(0) & 0xff
+
+  ords = Array::map.call(datastr, byteValue)
+  ui8a = new Uint8Array(ords)
+  @send(ui8a.buffer)
