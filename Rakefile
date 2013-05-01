@@ -1,5 +1,8 @@
 require 'bundler/setup'
 require 'bundler/gem_tasks'
+require 'rake/sprocketstask'
+require 'uglifier'
+require 'yui/compressor'
 
 namespace :assets do
   Rake::SprocketsTask.new do |t|
@@ -10,15 +13,15 @@ namespace :assets do
     require 'rack-putty'
     require 'tent-admin/app/middleware'
     require 'tent-admin/app/asset_server'
-    TentAdmin::AssetServer.asset_roots = %w( lib/assets vendor/assets )
-    TentAdmin::AssetServer.logfile = '/dev/null'
-    t.environment = TentAdmin::AssetServer.sprockets_environment
+    TentAdmin::App::AssetServer.asset_roots = %w( lib/assets vendor/assets )
+    TentAdmin::App::AssetServer.logfile = '/dev/null'
+    t.environment = TentAdmin::App::AssetServer.sprockets_environment
 
     t.environment.js_compressor = Uglifier.new
     t.environment.css_compressor = YUI::CssCompressor.new
 
     t.output      = "./public/assets"
-    t.assets      = []
+    t.assets      = %w( icing.css application.js )
     t.manifest = proc { Sprockets::Manifest.new(t.environment, "./public/assets", "./public/assets/manifest.json") }
   end
 
