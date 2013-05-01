@@ -1,0 +1,45 @@
+<div class='alert hide' data-alert-cid="<%= app.cid %>"></div>
+<li class='clearfix app' data-app_cid="<%= app.cid %>" data-view="App">
+  <input type='button' class='pull-right btn btn-danger' style='margin-top:10px' data-action='remove' data-app_cid='<%= app.cid %>' data-confirm='This will remove and deauthorize <%= app.get('content.name') %>. Are you sure you want to do that?' value='Remove' />
+  <h3><%= app.get('content.name') %></h3>
+  <p><%= app.get('content.description') %></p>
+
+  <h4>Permissions</h4>
+
+  <table class='table table-striped'>
+    <caption>Post Types</caption>
+
+    <thead>
+      <tr>
+        <th>Read</th>
+        <th>Write</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% var read_types = (app.get('content.post_types.read') || []).sort() %>
+      <% var write_types = (app.get('content.post_types.write') || []).sort() %>
+      <% var types_length = Math.max(read_types.length, write_types.length) %>
+      <% for (var index = 0; index < types_length; index++) {  %>
+        <tr>
+          <td><%= read_types[index] %></td>
+          <td><%= write_types[index] %></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <% if (app.get('content.scopes') && app.get('content.scopes').length) { %>
+    <table class='table table-striped'>
+      <caption>Scopes</caption>
+
+      <tbody>
+        <% _.forEach(app.get('content.scopes'), function(scope) { %>
+          <tr>
+            <td><%= scope %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</li>
