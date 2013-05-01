@@ -2,7 +2,9 @@
 
 <ul class='unstyled'>
   <% _.forEach(apps, function(app) { %>
-    <li>
+    <div class='alert hide' data-alert-cid="<%= app.cid %>"></div>
+    <li class='clearfix' data-app_cid="<%= app.cid %>">
+      <input type='button' class='pull-right btn btn-danger' style='margin-top:10px' data-action='remove' data-app_cid='<%= app.cid %>' data-confirm='This will remove and deauthorize <%= app.get('content.name') %>. Are you sure you want to do that?' value='Remove' />
       <h3><%= app.get('content.name') %></h3>
       <p><%= app.get('content.description') %></p>
 

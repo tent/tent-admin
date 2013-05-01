@@ -87,6 +87,7 @@ class @TentClient
     @post = {
       create: @createPost
       update: @updatePost
+      delete: @deletePost
       get: @getPost
       mentions: @getPostMentions
       versions: @getPostVersions
@@ -164,6 +165,16 @@ class @TentClient
 
     headers.Accept = media_type
     @runRequest('PUT', 'post', params, body, headers, null, callback)
+
+  deletePost: (args = {}) =>
+    [params, headers, callback] = [_.clone(args.params || {}), args.headers || {}, args.callback]
+
+    unless params.hasOwnProperty('entity')
+      params.entity = @entity
+    unless params.entity && params.post
+      throw new Error("entity and post members of params are required! Got \"#{params.entity}\" and \"#{params.post}\"")
+
+    @runRequest('DELETE', 'post', params, null, headers, null, callback)
 
   getPost: (args = {}) =>
     [params, headers, callback] = [_.clone(args.params || {}), args.headers || {}, args.callback]
