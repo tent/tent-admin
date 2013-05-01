@@ -2,7 +2,7 @@ module TentAdmin
   class App
     class Authentication < Middleware
       def action(env)
-        if current_user(env)
+        if current_user(env) && current_user(env).app_exists?
           env
         else
           redirect('/auth/tent')

@@ -48,6 +48,11 @@ module TentAdmin
         @client ||= ::TentClient.new(entity, :credentials => Utils::Hash.symbolize_keys(auth))
       end
 
+      def app_exists?
+        res = app_client.post.get(app['entity'], app['id'])
+        res.success?
+      end
+
       def server_meta_post
         @server_meta_post ||= begin
           post = client.server_meta_post
