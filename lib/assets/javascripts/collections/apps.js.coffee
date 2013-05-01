@@ -9,6 +9,11 @@ TentAdmin.Collections.Apps = class AppsCollection extends Marbles.Collection
 
   pagination: {}
 
+  fetchNext: (options = {}) =>
+    return false unless @pagination.next
+    next_params = Marbles.History::parseQueryParams(@pagination.next)
+    @fetch(next_params, _.extend({ append: true }, options))
+
   fetch: (params = {}, options = {}) =>
     complete = (res, xhr) =>
       models = null
@@ -31,7 +36,10 @@ TentAdmin.Collections.Apps = class AppsCollection extends Marbles.Collection
     TentAdmin.tent_client.post.list(params: params, callback: complete)
 
   fetchSuccess: (params, options, res, xhr) =>
-    _.extend(@pagination, res.pages)
+    @pagination = _.extend({
+      first: @pagination.first
+      last: @pagination.last
+    }, res.pages)
 
     data = res.data
 

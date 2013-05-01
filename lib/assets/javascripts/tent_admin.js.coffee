@@ -40,6 +40,8 @@ _.extend window.TentAdmin, Marbles.Events, {
     main_view = new Marbles.View el: document
     main_view.bindViews()
 
+    Marbles.DOM.on window, 'scroll', (e) => @trigger 'window:scroll', e
+
     Marbles.history.start(@config.history_options)
 
     @ready = true
