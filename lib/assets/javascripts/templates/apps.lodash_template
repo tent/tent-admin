@@ -1,1 +1,49 @@
-<h1>Apps</h1>
+<h1 class='page-header'>Apps</h1>
+
+<ul class='unstyled'>
+  <% _.forEach(apps, function(app) { %>
+    <li>
+      <h3><%= app.get('content.name') %></h3>
+      <p><%= app.get('content.description') %></p>
+
+      <h4>Permissions</h4>
+
+      <table class='table table-striped'>
+        <caption>Post Types</caption>
+
+        <thead>
+          <tr>
+            <th>Read</th>
+            <th>Write</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% var read_types = (app.get('content.post_types.read') || []).sort() %>
+          <% var write_types = (app.get('content.post_types.write') || []).sort() %>
+          <% var types_length = Math.max(read_types.length, write_types.length) %>
+          <% for (var index = 0; index < types_length; index++) {  %>
+            <tr>
+              <td><%= read_types[index] %></td>
+              <td><%= write_types[index] %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      <% if (app.get('content.scopes') && app.get('content.scopes').length) { %>
+        <table class='table table-striped'>
+          <caption>Scopes</caption>
+
+          <tbody>
+            <% _.forEach(app.get('content.scopes'), function(scope) { %>
+              <tr>
+                <td><%= scope %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </li>
+  <% }) %>
+</ul>
