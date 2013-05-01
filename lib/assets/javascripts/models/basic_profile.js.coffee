@@ -89,11 +89,9 @@ TentAdmin.Models.BasicProfile = class BasicProfileModel extends Marbles.Model
     return unless value && value.length
     return unless avatar_attachment = _.find value, (attachment) =>
       attachment.category == 'avatar'
-    url = TentAdmin.tent_client.getNamedUrl('post_attachment',
+    url = TentAdmin.tent_client.getNamedUrl('attachment',
       entity: @get('entity')
-      post: @get('id')
-      version: @get('version.id')
-      name: avatar_attachment.name
+      digest: avatar_attachment.digest
     )
     @set('avatar_url', url)
 
