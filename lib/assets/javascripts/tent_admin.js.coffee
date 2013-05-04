@@ -1,7 +1,5 @@
 #= require lodash
 #= require marbles
-#= require ./marbles/http
-#= require ./marbles/middleware
 #= require tent_client
 #= require_self
 #= require_tree ./routers

@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'coffee-script'
   gem.add_runtime_dependency 'sass'
   gem.add_runtime_dependency 'marbles-js'
+  gem.add_runtime_dependency 'marbles-tent-client-js'
   gem.add_runtime_dependency 'lodash-assets'
   gem.add_runtime_dependency 'icing'
   gem.add_runtime_dependency 'omniauth-tent'
