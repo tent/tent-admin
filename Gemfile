@@ -14,6 +14,7 @@ gem 'icing', :git => 'git://github.com/tent/icing.git', :branch => 'master'
 gem 'marbles-tent-client-js', :git => 'git://github.com/tent/marbles-tent-client-js.git', :branch => 'master'
 gem 'lodash-assets', :git => 'git://github.com/jvatic/lodash-assets.git', :branch => 'master'
 gem 'sequel-json', :git => 'git://github.com/tent/sequel-json.git', :branch => 'master'
+gem 'sprockets', :git => 'git://github.com/jvaill/sprockets.git', :branch => 'master'
 
 group :development, :assets do
   gem 'asset_sync', :git => 'git://github.com/titanous/asset_sync.git', :branch => 'fix-mime'
