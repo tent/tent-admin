@@ -1,6 +1,6 @@
 #= require lodash
 #= require marbles
-#= require tent_client
+#= require tent-client
 #= require_self
 #= require_tree ./routers
 #= require_tree ./templates
