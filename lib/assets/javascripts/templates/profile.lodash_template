@@ -60,7 +60,7 @@
     <label class="control-label" for="basic_profile[bio]">Bio</label>
     <div class="controls">
       <div class="input-append">
-        <textarea name='bio' class='input input-xlarge' rows='3'><%= basic_profile.get('content.bio') %></textarea>
+        <textarea name='basic_profile[bio]' class='input input-xlarge' rows='3'><%= basic_profile.get('content.bio') %></textarea>
       </div>
     </div>
   </div>
