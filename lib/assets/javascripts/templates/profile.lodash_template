@@ -6,70 +6,50 @@
 
 <form class='form-horizontal'>
   <div class="control-group">
-    <% if (basic_profile.get('avatar_url')) { %>
-      <img class="avatar avatar-large profile-avatar" src="<%= basic_profile.get('avatar_url') %>" />
+    <% if (meta_profile.get('avatar_url')) { %>
+      <img class="avatar avatar-large profile-avatar" src="<%= meta_profile.get('avatar_url') %>" />
     <% } else { %>
-      <label class="control-label" for="basic_profile[avatar]">avatar</label>
+      <label class="control-label" for="meta_profile[avatar]">avatar</label>
     <% } %>
     <div class="controls">
       <div class="input-append">
-        <input name="basic_profile[avatar]" type="file">
+        <input name="meta_profile[avatar]" type="file">
       </div>
     </div>
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="basic_profile[name]">name</label>
+    <label class="control-label" for="meta_profile[name]">name</label>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="basic_profile[name]" type="text" value="<%= basic_profile.get('content.name') %>">
-      </div>
-    </div>
-  </div>
-
-  
-  <div class="control-group">
-    <label class="control-label" for="basic_profile[birthdate]">birthdate</label>
-    <div class="controls">
-      <div class="input-append">
-        <input class="input input-xlarge" name="basic_profile[birthdate]" type="text" value="<%= basic_profile.get('content.birthdate') %>">
-      </div>
-    </div>
-  </div>
-
-  
-  <div class="control-group">
-    <label class="control-label" for="basic_profile[location]">location</label>
-    <div class="controls">
-      <div class="input-append">
-        <input class="input input-xlarge" name="basic_profile[location]" type="text" value="<%= basic_profile.get('content.location') %>">
+        <input class="input input-xlarge" name="meta_profile[name]" type="text" value="<%= meta_profile.get('name') %>">
       </div>
     </div>
   </div>
   
   <div class="control-group">
-    <label class="control-label" for="basic_profile[gender]">gender</label>
+    <label class="control-label" for="meta_profile[location]">location</label>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="basic_profile[gender]" type="text" value="<%= basic_profile.get('content.gender') %>">
+        <input class="input input-xlarge" name="meta_profile[location]" type="text" value="<%= meta_profile.get('location') %>">
       </div>
     </div>
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="basic_profile[bio]">Bio</label>
+    <label class="control-label" for="meta_profile[bio]">Bio</label>
     <div class="controls">
       <div class="input-append">
-        <textarea name='basic_profile[bio]' class='input input-xlarge' rows='3'><%= basic_profile.get('content.bio') %></textarea>
+        <textarea name='meta_profile[bio]' class='input input-xlarge' rows='3'><%= meta_profile.get('bio') %></textarea>
       </div>
     </div>
   </div>
   
   <div class="control-group">
-    <label class="control-label" for="basic_profile[website_url]">website url</label>
+    <label class="control-label" for="meta_profile[website]">website url</label>
     <div class="controls">
       <div class="input-append">
-        <input class="input input-xlarge" name="basic_profile[website_url]" type="text" value="<%= basic_profile.get('content.website_url') %>">
+        <input class="input input-xlarge" name="meta_profile[website]" type="text" value="<%= meta_profile.get('website') %>">
       </div>
     </div>
   </div>

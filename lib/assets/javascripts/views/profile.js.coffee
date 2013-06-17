@@ -8,12 +8,10 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
 
     @on 'ready', @bindForm
 
-    @basic_profile = TentAdmin.Models.BasicProfile.find(entity: TentAdmin.config.current_user.entity, fetch: false) || new TentAdmin.Models.BasicProfile
-    @basic_profile.on 'fetch:success', => @render()
-    @basic_profile.on 'change:avatar_url', => @render()
-    @basic_profile.on 'save:failure', @saveFailure
-    @basic_profile.on 'save:success', @saveSuccess
-    @basic_profile.fetch()
+    @meta_profile = TentAdmin.Models.MetaProfile.find(entity: TentAdmin.config.current_user.entity, fetch: false) || new TentAdmin.Models.MetaProfile
+    @meta_profile.on 'change:avatar_url', => @render()
+    @meta_profile.on 'save:failure', @saveFailure
+    @meta_profile.on 'save:success', @saveSuccess
 
     @render()
 
@@ -35,36 +33,34 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
 
   avatarSelected: =>
     data = Marbles.DOM.serializeForm(@elements.form)
-    avatar = data['basic_profile[avatar]']?[0]
+    avatar = data['meta_profile[avatar]']?[0]
     return unless avatar
-    @basic_profile.set('avatar', avatar)
+    @meta_profile.set('avatar', avatar)
 
   saveFailure: (data, xhr) =>
     @render(@context flash_message: { text: "Failed to save: #{data.error}", type: 'error' })
 
-  saveSuccess: (basic_profile, xhr) =>
+  saveSuccess: (meta_profile, xhr) =>
     @render(@context flash_message: { text: "Saved!", type: 'success' })
 
   saveForm: (e) =>
     e?.preventDefault()
     data = Marbles.DOM.serializeForm(@elements.form)
-    basic_profile_data = _.inject(data, ((memo, val, key) =>
-      return memo unless val
-      return memo unless key.match(/^basic_profile\[([^\[]+)\]$/)
+    meta_profile_data = {}
+    for k, v of data
+      continue unless k.match(/^meta_profile\[([^\[]+)\]$/)
       name = RegExp.$1
-      return memo if name == 'avatar'
-      memo[name] = val
-      memo
-    ), {})
+      continue if name == 'avatar'
+      meta_profile_data[name] = v
 
-    for key, val of basic_profile_data
-      @basic_profile.set("content.#{key}", val)
+    for key, val of meta_profile_data
+      @meta_profile.set(key, val)
 
     @disableSubmit()
-    @basic_profile.save()
+    @meta_profile.save()
 
   context: (additional_data = {}) =>
     _.extend { flash_message: null }, TentAdmin.config, {
-      basic_profile: @basic_profile
+      meta_profile: @meta_profile
     }, additional_data
 
