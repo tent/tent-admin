@@ -41,7 +41,7 @@ TentAdmin.Collections.Apps = class AppsCollection extends Marbles.Collection
       last: @pagination.last
     }, res.pages)
 
-    data = res.data
+    data = res.posts
 
     models = if options.append
       @appendJSON(data)
