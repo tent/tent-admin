@@ -17,8 +17,8 @@
     </thead>
 
     <tbody>
-      <% var read_types = (app.get('content.post_types.read') || []).sort() %>
-      <% var write_types = (app.get('content.post_types.write') || []).sort() %>
+      <% var read_types = (app.get('content.types.read') || []).sort() %>
+      <% var write_types = (app.get('content.types.write') || []).sort() %>
       <% var types_length = Math.max(read_types.length, write_types.length) %>
       <% for (var index = 0; index < types_length; index++) {  %>
         <tr>

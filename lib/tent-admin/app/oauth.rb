@@ -53,18 +53,18 @@ module TentAdmin
         # Compare existing permissions with requested permissions
         add_scopes = Array(app[:content][:scopes]) - app_auth[:content][:scopes]
         remove_scopes = Array(app_auth[:content][:scopes]) - app[:content][:scopes]
-r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][:post_types][:read]
-        remove_read_types = app_auth[:content][:post_types][:read] - app[:content][:post_types][:read]
-        add_write_types = app[:content][:post_types][:write] - app_auth[:content][:post_types][:write]
-        remove_write_types = app_auth[:content][:post_types][:write] - app[:content][:post_types][:write]
+r       add_read_types = app[:content][:types][:read] - app_auth[:content][:types][:read]
+        remove_read_types = app_auth[:content][:types][:read] - app[:content][:types][:read]
+        add_write_types = app[:content][:types][:write] - app_auth[:content][:types][:write]
+        remove_write_types = app_auth[:content][:types][:write] - app[:content][:types][:write]
 
         if (add_scopes + add_read_types + add_write_types).empty?
           if (remove_scopes + remove_read_types + remove_write_types).any?
             # We're only removing permissions
             data = Utils::Hash.dup(app_auth)
             data[:content][:scopes] -= remove_scopes
-            data[:content][:post_types][:read] -= remove_read_types
-            data[:content][:post_types][:write] -= remove_write_types
+            data[:content][:types][:read] -= remove_read_types
+            data[:content][:types][:write] -= remove_write_types
             data[:version] = { :parents => [{ :version => data[:version][:id] }] }
             res = user.client.post.update(data[:entity], data[:id], data)
             if res.success?
@@ -217,10 +217,10 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
         scopes = app[:content][:scopes].to_a.select do |scope|
           env['params'][scope] == 'on'
         end
-        read_types = app[:content][:post_types][:read].select do |type|
+        read_types = app[:content][:types][:read].select do |type|
           env['params'][type] == 'on'
         end
-        write_types = app[:content][:post_types][:write].select do |type|
+        write_types = app[:content][:types][:write].select do |type|
           env['params'][type] == 'on'
         end
 
@@ -228,7 +228,7 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
           data = Utils::Hash.dup(app_auth)
           data[:version] = { :parents => [{ :version => data[:version][:id] }] }
           data[:content][:scopes] = scopes
-          data[:content][:post_types] = {
+          data[:content][:types] = {
             :read => read_types,
             :write => write_types
           }
@@ -240,7 +240,7 @@ r       add_read_types = app[:content][:post_types][:read] - app_auth[:content][
             :type => APP_AUTH_POST_TYPE,
             :content => {
               :scopes => scopes,
-              :post_types => {
+              :types => {
                 :read => read_types,
                 :write => write_types
               }
