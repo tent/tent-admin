@@ -37,6 +37,8 @@ module TentAdmin
     ##
     # App settings
     self.settings[:url]                  = options[:url]                  || ENV['URL']
+    self.settings[:status_url]           = options[:status_url]           || ENV['STATUS_URL']
+    self.settings[:search_url]           = options[:search_url]           || ENV['SEARCH_URL']
     self.settings[:path_prefix]          = options[:path_prefix]          || ENV['PATH_PREFIX']
     self.settings[:public_dir]           = options[:public_dir]           || File.expand_path('../../public/assets', __FILE__) # lib/../public/assets
     self.settings[:database_url]         = options[:database_url]         || ENV['DATABASE_URL']

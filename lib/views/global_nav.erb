@@ -1,14 +1,18 @@
 <ul class='unstyled custom-container'>
-  <li>
-    <a href='#status'><div class='nav-icon app-icon-tentstatus icon-2x'></div></a>
-  </li>
+  <% if TentAdmin.settings[:status_url] %>
+    <li>
+      <a href='<%= TentAdmin.settings[:status_url] %>'><div class='nav-icon app-icon-tentstatus icon-2x'></div></a>
+    </li>
+  <% end %>
 
-  <li>
-    <a href="#search" title='Search'><div class='nav-icon app-icon-search icon-2x'></div></a>
-  </li>
+  <% if TentAdmin.settings[:search_url] %>
+    <li>
+      <a href="<%= TentAdmin.settings[:search_url] %>" title='Search'><div class='nav-icon app-icon-search icon-2x'></div></a>
+    </li>
+  <% end %>
 
   <li class='nav-selected'>
-    <a href='/' title='Admin'><div class='nav-icon app-icon-settings icon-2x'></div></a>
+    <a href='<%= TentAdmin.settings[:url] %>' title='Admin'><div class='nav-icon app-icon-settings icon-2x'></div></a>
   </li>
 
   <li>
