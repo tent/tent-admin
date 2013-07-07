@@ -64,6 +64,23 @@ module TentAdmin
       end
     end
 
+    class ContentSecurityPolicy < Middleware
+      def action(env)
+        env['response.headers'] ||= {}
+        env['response.headers']["Content-Security-Policy"] = content_security_policy
+        env
+      end
+
+      def content_security_policy
+        [
+          "default-src 'self'",
+          "object-src 'none'",
+          "img-src *",
+          "connect-src *"
+        ].join('; ')
+      end
+    end
+
     get '/assets/*' do |b|
       b.use AssetServer
     end
@@ -105,6 +122,7 @@ module TentAdmin
     end
 
     get '*' do |b|
+      b.use ContentSecurityPolicy
       b.use Authentication
       b.use MainApplication
       b.use RenderView
