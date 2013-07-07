@@ -1,6 +1,7 @@
 #= require lodash
 #= require marbles
 #= require tent-client
+#= require ./config
 #= require_self
 #= require_tree ./routers
 #= require_tree ./templates
@@ -9,13 +10,6 @@
 #= require_tree ./collections
 
 window.TentAdmin ?= {}
-TentAdmin.config ?= {}
-TentAdmin.tent_client = new TentClient(
-  TentAdmin.config.current_user.entity,
-  credentials: TentAdmin.config.current_user.credentials
-  server_meta_post: TentAdmin.config.current_user.server_meta_post
-)
-
 _.extend window.TentAdmin, Marbles.Events, {
   Models: {}
   Collections: {}
@@ -40,7 +34,7 @@ _.extend window.TentAdmin, Marbles.Events, {
 
     Marbles.DOM.on window, 'scroll', (e) => @trigger 'window:scroll', e
 
-    Marbles.history.start(@config.history_options)
+    Marbles.history.start(root: (@config.PATH_PREFIX || '') + '/')
 
     @ready = true
     @trigger 'ready'
@@ -55,3 +49,6 @@ _.extend window.TentAdmin, Marbles.Events, {
     @_num_running_requests -= 1
     Marbles.Views.loading_indicator?.hide() if @_num_running_requests == 0
 }
+
+TentAdmin.trigger('config:ready') if TentAdmin.config_ready
+

@@ -5,7 +5,11 @@ module TentAdmin
         if current_user(env) && current_user(env).app_exists?
           env
         else
-          redirect('/auth/tent')
+          if @options[:redirect] == false
+            [404, env['response.headers'] || {}, []]
+          else
+            redirect('/auth/tent', env)
+          end
         end
       end
     end

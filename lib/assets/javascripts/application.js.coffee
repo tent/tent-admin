@@ -1,2 +1,3 @@
 #= require ./tent_admin
-TentAdmin.run()
+
+TentAdmin.once 'config:ready', => TentAdmin.run()
