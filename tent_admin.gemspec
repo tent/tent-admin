@@ -21,7 +21,9 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'mimetype-fu'
   gem.add_runtime_dependency 'sprockets', '~> 2.0'
   gem.add_runtime_dependency 'coffee-script'
+  gem.add_runtime_dependency 'sass'
   gem.add_runtime_dependency 'marbles-js'
+  gem.add_runtime_dependency 'icing'
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"

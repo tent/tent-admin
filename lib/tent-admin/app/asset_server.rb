@@ -2,7 +2,9 @@ require 'yaml'
 require 'mimetype_fu'
 require 'sprockets'
 require 'coffee_script'
+require 'sass'
 require 'marbles-js'
+require 'icing'
 
 module TentAdmin
   class App
@@ -33,6 +35,7 @@ module TentAdmin
         end
 
         MarblesJS.sprockets_setup(environment)
+        Icing::Sprockets.setup(environment)
 
         environment
       end
