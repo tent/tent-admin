@@ -11,23 +11,7 @@
 
   <body>
     <div class='v-navbar-fixed-left'>
-      <ul class='unstyled custom-container'>
-        <li>
-          <a href='#status'><div class='nav-icon app-icon-tentstatus icon-2x'></div></a>
-        </li>
-
-        <li>
-          <a href="#search" title='Search'><div class='nav-icon app-icon-search icon-2x'></div></a>
-        </li>
-
-        <li class='nav-selected'>
-          <a href='/' title='Admin'><div class='nav-icon app-icon-settings icon-2x'></div></a>
-        </li>
-
-        <li>
-          <a href='/signout' title='Signout'><div class='nav-icon app-icon-signout icon-2x'></div></a>
-        </li>
-      </ul>
+      <%= erb :global_nav %>
     </div>
 
     <div id='main-nav'>
