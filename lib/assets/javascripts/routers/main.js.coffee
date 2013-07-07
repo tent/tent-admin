@@ -8,7 +8,7 @@ TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
   resetScrollPosition: =>
     hash_fragment = window.location.hash
     window.scrollTo(0, 0)
-    window.location.hash = hash_fragment
+    window.location.hash = hash_fragment unless hash_fragment == '#'
 
   root: =>
     @navigate('/profile', { replace: true, trigger: true })
