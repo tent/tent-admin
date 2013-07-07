@@ -9,14 +9,6 @@ module TentAdmin
     require 'tent-admin/app/render_view'
     require 'tent-admin/app/authentication'
 
-    def self.settings
-      @settings ||= Hash.new
-    end
-
-    def initialize(settings = {})
-      self.class.settings.merge!(settings)
-    end
-
     AssetServer.asset_roots = [
       File.expand_path('../../assets', __FILE__), # lib/assets
       File.expand_path('../../../vendor/assets', __FILE__) # vendor/assets
@@ -56,24 +48,13 @@ module TentAdmin
           :get_app => AppLookup,
           :on_app_created => AppCreate,
           :app => {
-            :name => "Tent Admin",
-            :description => "Tent Server Admin App",
-            :url => ENV['URL'],
-            :redirect_uri => "#{ENV['URL'].sub(%r{/\Z}, '')}/auth/tent/callback",
-            :read_types => %w(
-              https://tent.io/types/app/v0#
-              https://tent.io/types/app-auth/v0#
-              https://tent.io/types/credentials/v0#
-              https://tent.io/types/basic-profile/v0#
-            ),
-            :write_types => %w(
-              https://tent.io/types/app/v0#
-              https://tent.io/types/app-auth/v0#
-              https://tent.io/types/credentials/v0#
-              https://tent.io/types/meta/v0#
-              https://tent.io/types/basic-profile/v0#
-            ),
-            :scopes => %w()
+            :name => TentAdmin.settings[:name],
+            :description => TentAdmin.settings[:description],
+            :url => TentAdmin.settings[:display_url],
+            :redirect_uri => TentAdmin.settings[:redirect_uri],
+            :read_types => TentAdmin.settings[:read_types],
+            :write_types => TentAdmin.settings[:write_types],
+            :scopes => TentAdmin.settings[:scopes]
           }
         }
       end

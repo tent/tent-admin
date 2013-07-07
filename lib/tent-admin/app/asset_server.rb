@@ -54,7 +54,7 @@ module TentAdmin
       def initialize(app, options = {})
         super
 
-        @public_dir = @options[:public_dir] || App.settings[:public_dir] || File.expand_path('../../../../public/assets', __FILE__) # lib/../public/assets
+        @public_dir = TentAdmin.settings[:public_dir]
 
         @sprockets_environment = self.class.sprockets_environment
       end
