@@ -21,6 +21,13 @@ module TentAdmin
 
     stack_base SerializeResponse
 
+    class MainApplication < Middleware
+      def action(env)
+        env['response.view'] = 'application'
+        env
+      end
+    end
+
     class Favicon < Middleware
       def action(env)
         env['REQUEST_PATH'].sub!(%r{/favicon}, "/assets/favicon")
@@ -36,6 +43,11 @@ module TentAdmin
     get '/favicon.ico' do |b|
       b.use Favicon
       b.use AssetServer
+    end
+
+    get %r{/((profile)|(apps))?} do |b|
+      b.use MainApplication
+      b.use RenderView
     end
   end
 end

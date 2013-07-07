@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Admin</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <link href="<%= asset_path("icing.css") %>" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class='v-navbar-fixed-left'>
+      <ul class='unstyled custom-container'>
+        <li>
+          <a href='#status'><div class='nav-icon app-icon-tentstatus icon-2x'></div></a>
+        </li>
+
+        <li>
+          <a href="#search" title='Search'><div class='nav-icon app-icon-search icon-2x'></div></a>
+        </li>
+
+        <li class='nav-selected'>
+          <a href='/' title='Admin'><div class='nav-icon app-icon-settings icon-2x'></div></a>
+        </li>
+
+        <li>
+          <a href='/signout' title='Signout'><div class='nav-icon app-icon-signout icon-2x'></div></a>
+        </li>
+      </ul>
+    </div>
+
+    <div id='main-nav'>
+      <a class="menu-switch js-menu-switch">Menu</a>
+      <%= erb :nav %>
+    </div>
+
+    <div id='main-container' class='container'>
+      <div id='main' class='pull-left'>
+        <%= yield if block_given? %>
+      </div>
+    </div>
+
+    <script type='application/javascript' src='<%= asset_path('application.js') %>'></script>
+  </body>
+</html>
