@@ -7,6 +7,9 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
 
     @elements = {}
 
+    splash_view = new Marbles.Views.OAuthSplash container: @container
+    splash_view.render()
+
     @on 'ready', @bindForm
 
     TentAdmin.Models.App.find(
@@ -62,6 +65,8 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
 
   bindForm: =>
     @elements.form = Marbles.DOM.querySelector('form', @el)
+    return unless @elements.form
+
     @elements.form_deny = Marbles.DOM.querySelector('[data-access=deny]', @elements.form)
     Marbles.DOM.on @elements.form, 'submit', @handleFormSubmit
     Marbles.DOM.on @elements.form_deny, 'click', @handleUserAbort
