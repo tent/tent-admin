@@ -1,8 +1,21 @@
-#= require lowdash
+#= require lodash
 #= require marbles
+#= require ./marbles/http
+#= require ./marbles/middleware
+#= require tent_client
 #= require_self
+#= require_tree ./routers
+#= require_tree ./templates
+#= require_tree ./views
+#= require_tree ./models
 
 window.TentAdmin ?= {}
+TentAdmin.config ?= {}
+TentAdmin.tent_client = new TentClient(
+  TentAdmin.config.current_user.entity,
+  credentials: TentAdmin.config.current_user.credentials
+  server_meta_post: TentAdmin.config.current_user.server_meta_post
+)
 
 _.extend window.TentAdmin, Marbles.Events, {
   Models: {}
@@ -10,9 +23,8 @@ _.extend window.TentAdmin, Marbles.Events, {
   Routers: {}
   Helpers: {}
 
-  config: {}
-
   run: ->
+    Marbles.View.templates ?= window.LoDashTemplates
     return if !Marbles.history || Marbles.history.started
 
     @showLoadingIndicator()
@@ -20,6 +32,12 @@ _.extend window.TentAdmin, Marbles.Events, {
 
     @on 'loading:start', @showLoadingIndicator
     @on 'loading:stop',  @hideLoadingIndicator
+
+    @config.container ?= { el: document.getElementById('main') }
+
+    # find any view bindings before client-side views are rendered
+    main_view = new Marbles.View el: document
+    main_view.bindViews()
 
     Marbles.history.start(@config.history_options)
 

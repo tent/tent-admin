@@ -3,6 +3,7 @@ require 'mimetype_fu'
 require 'sprockets'
 require 'coffee_script'
 require 'sass'
+require 'lodash-assets'
 require 'marbles-js'
 require 'icing'
 

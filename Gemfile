@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
 
 # Specify your gem's dependencies in tent_admin.gemspec
 gemspec
@@ -12,6 +11,7 @@ gem 'hawk-auth', :git => 'git://github.com/tent/hawk-auth-ruby.git', :branch => 
 gem 'omniauth-tent', :git => 'git://github.com/tent/omniauth-tent.git', :branch => '0.3'
 gem 'marbles-js', :git => 'git://github.com/jvatic/marbles-js.git', :branch => 'master'
 gem 'icing', :git => 'git://github.com/tent/icing.git', :branch => 'master'
+gem 'lodash-assets', :git => 'git://github.com/jvatic/lodash-assets.git', :branch => 'master'
 gem 'sequel-json', :git => 'git://github.com/tent/sequel-json.git', :branch => 'master'
 
 group :development, :assets do

@@ -42,6 +42,17 @@
     </div>
 
     <% unless block_given? %>
+      <script type='application/javascript'>
+        window.TentAdmin = {};
+        window.TentAdmin.config = {
+          current_user: {
+            credentials: <%= Yajl::Encoder.encode(current_user.auth) %>,
+            entity: <%= current_user.entity.to_s.inspect %>,
+            server_meta_post: <%= Yajl::Encoder.encode(current_user.server_meta_post) %>
+          }
+        };
+      </script>
+
       <script type='application/javascript' src='<%= asset_path('application.js') %>'></script>
     <% end %>
   </body>

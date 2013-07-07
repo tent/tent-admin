@@ -65,12 +65,14 @@ module TentAdmin
               https://tent.io/types/app/v0#
               https://tent.io/types/app-auth/v0#
               https://tent.io/types/credentials/v0#
+              https://tent.io/types/basic-profile/v0#
             ),
             :write_post_types => %w(
               https://tent.io/types/app/v0#
               https://tent.io/types/app-auth/v0#
               https://tent.io/types/credentials/v0#
               https://tent.io/types/meta/v0#
+              https://tent.io/types/basic-profile/v0#
             ),
             :scopes => %w()
           }

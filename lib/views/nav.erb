@@ -1,10 +1,10 @@
-<ul class="unstyled app-nav-list">
-  <a href="<%= full_path("/profile") %>" class="<%= nav_selected_class("/profile") %>">
+<ul class="unstyled app-nav-list" data-view="MainNavigation" data-nav_selected_class="active">
+  <a href="<%= full_path("/profile") %>" class="<%= nav_selected_class("/profile") %>" data-fragment="profile">
     <li>
       <i class="icon-user"></i>Profile
     </li>
   </a>
-  <a href="<%= full_path("/apps") %>" class="<%= nav_selected_class("/apps") %>">
+  <a href="<%= full_path("/apps") %>" class="<%= nav_selected_class("/apps") %>" data-fragment="apps">
     <li>
       <i class="icon-list"></i>Apps
     </li>

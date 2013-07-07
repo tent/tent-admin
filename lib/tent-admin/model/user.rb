@@ -22,8 +22,12 @@ module TentAdmin
       end
 
       def self.create(entity, app)
-        user = super(:entity => entity, :app => app)
-        user.setup_oauth!
+        if user = first(:entity => entity)
+          user.update(:app => app)
+        else
+          user = super(:entity => entity, :app => app)
+          user.setup_oauth!
+        end
         user
       end
 

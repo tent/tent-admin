@@ -24,6 +24,10 @@ module TentAdmin
           @block.call(self)
         end
 
+        def current_user
+          env['current_user'] ||= Model::User.first(:id => env['rack.session']['current_user_id'])
+        end
+
         def sprockets_environment
           AssetServer.sprockets_environment
         end
