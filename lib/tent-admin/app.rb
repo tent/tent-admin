@@ -14,6 +14,10 @@ module TentAdmin
       File.expand_path('../../../vendor/assets', __FILE__) # vendor/assets
     ]
 
+    RenderView.view_roots = [
+      File.expand_path(File.join(File.dirname(__FILE__), '..', 'views')) # lib/views
+    ]
+
     include Rack::Putty::Router
 
     stack_base SerializeResponse
