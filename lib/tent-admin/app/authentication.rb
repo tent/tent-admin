@@ -45,6 +45,7 @@ module TentAdmin
           env['current_user'] = user
 
           user.update_authorization(env['omniauth.auth'].extra.credentials)
+          user.setup_oauth!
 
           redirect('/')
         else
