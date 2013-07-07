@@ -4,6 +4,17 @@ TentAdmin.Models.App = class AppModel extends Marbles.Model
 
   @post_type: new TentClient.PostType('https://tent.io/types/app/v0#')
 
+  @fetch: (params = {}, options = {}) ->
+    callbackFn = (res, xhr) =>
+      if xhr.status == 200
+        model = new @(res.post)
+        options.success?(model, xhr)
+      else
+        options.failure?(res, xhr)
+      options.complete?(res, xhr)
+
+    TentAdmin.tent_client.post.get(params: params, callback: callbackFn)
+
   delete: (options = {}) =>
     success = (xhr) =>
       options.success?(@, xhr)

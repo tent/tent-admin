@@ -1,0 +1,60 @@
+<form class='form-horizontal'>
+  <h1 class='page-header'>Authorize App: <small><%- app.get('content.name') %></small></h1>
+
+  <h2>Requested Post Type Access</h2>
+  <table class='table table-striped'>
+    <thead>
+      <tr>
+        <th>Read</th>
+        <th>Write</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% read_types = app.get('content.types.read').sort() %>
+      <% write_types = app.get('content.types.write').sort() %>
+      <% for (var index=0, _len=Math.max(read_types.length, write_types.length); index < _len; index++) { %>
+        <tr>
+          <td>
+            <% if (index < read_types.length) { %>
+              <label class='control-label'>
+                <input name="read_types[<%- read_types[index] %>]" type="checkbox" checked />&nbsp;<%- read_types[index] %>
+              </label>
+            <% } %>
+          </td>
+
+          <td>
+            <% if (index < write_types.length) { %>
+              <label class='control-label'>
+                <input name="write_types[<%- write_types[index] %>]" type="checkbox" checked />&nbsp;<%- write_types[index] %>
+              </label>
+            <% } %>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <% if (app.get('content.scopes') && app.get('content.scopes').length) { %>
+    <h2>Requested Scopes</h2>
+
+    <table class='table table-striped'>
+      <tbody>
+        <% app.get('content.scopes').forEach(function(scope) { %>
+          <tr>
+            <td>
+              <label>
+                <input name="scopes[<%- scope %>]" type="checkbox" checked />&nbsp;<%- scope %>
+              </label>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+
+  <div class='form-actions'>
+    <input class='btn btn-success' type='submit' value='Allow Access' />
+    <input class='btn pull-right' type='button' value='No Thanks' data-access='deny' />
+  </div>
+</form>
