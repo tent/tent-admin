@@ -1,4 +1,5 @@
 Marbles.Views.Profile = class ProfileView extends Marbles.View
+  @view_name: 'profile'
   @template_name: 'profile'
 
   constructor: ->
