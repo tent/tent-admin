@@ -13,7 +13,48 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
       { post: @params.client_id, entity: TentAdmin.config.current_user.entity },
       success: (app, xhr) =>
         @app_cid = app.cid
-        @render(@context(app))
+
+        TentAdmin.Models.AppAuth.fetch({ app: app },
+          success: (app_auth) =>
+            auth_types = {
+              read: (app_auth.get('content.types.read') || []).sort()
+              write: (app_auth.get('content.types.write') || []).sort()
+            }
+            auth_scopes = (app_auth.get('content.scopes') || []).sort()
+
+            app_types = {
+              read: (app.get('content.types.read') || []).sort()
+              write: (app.get('content.types.write') || []).sort()
+            }
+            app_scopes = (app.get('content.scopes') || []).sort()
+
+            if auth_types == app_types && auth_scopes == app_scopes
+              @handleSuccess(app_auth.get('credentials.content.hawk_key'))
+            else
+              added_read_types = _.difference(app_types.read, auth_types.read)
+              added_write_types = _.difference(app_types.write, auth_types.write)
+              added_scopes = _.difference(app_scopes, auth_scopes)
+
+              if added_read_types.length || added_write_types.length || added_scopes.length
+                @render(@context(app))
+              else
+                app_auth.update({
+                  content:
+                    types:
+                      read: app_types.read
+                      write: app_types.write
+                    scopes: app_scopes
+                },
+                  success: (app_auth, xhr) =>
+                    @handleSuccess(app_auth.get('credentials.content.hawk_key'))
+
+                  failure: (res, xhr) =>
+                    @render(@context(app))
+                )
+
+          failure: (res, xhr) =>
+            @render(@context(app))
+        )
 
       failure: (res, xhr) =>
         console.error("Failed to lookup app!", xhr.status, res, xhr)

@@ -4,6 +4,38 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
 
   @post_type: new TentClient.PostType('https://tent.io/types/app-auth/v0#')
 
+  @fetch: (params, options = {}) ->
+    unless app = params.app
+      throw "params.app not given"
+
+    callbackFn = (res, xhr) =>
+      if xhr.status == 200 && res.posts.length && res.refs.length
+        post = res.posts[0]
+        app_auth = @find(id: post.id, entity: post.entity, fetch: false) || new @(post)
+
+        credentials = null
+        for ref in res.refs
+          continue unless (new TentClient.PostType ref.type).base == 'https://tent.io/types/credentials'
+          credentials = ref
+          break
+        app_auth.set("credentials", credentials) if credentials
+
+        options.success?(app_auth, xhr)
+      else
+        options.failure?(res, xhr)
+
+      options.complete?(res, xhr)
+
+    TentAdmin.tent_client.post.list(
+      params:
+        types: @post_type.toString()
+        mentions: "#{app.get('entity')} #{app.get('id')}"
+        max_refs: 10
+        limit: 1
+
+      callback: callbackFn
+    )
+
   @updateOrCreate: (params, options = {}) ->
     data = params.data
 
@@ -18,27 +50,20 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
       { post: app.get('id'), type: app.get('type') }
     ]
 
-    callbackFn = (res, xhr) =>
+    successFn = (app_auth, xhr) =>
+      app_auth.update(data, options)
+
+    failureFn = (res, xhr) =>
       unless xhr.status == 200
         options.failure?(res, xhr)
         options.complete?(res, xhr)
         return
 
-      if res.posts.length
-        post = res.posts[0]
-        app_auth = @find(id: post.id, entity: post.entity, fetch: false) || new @(post)
-        app_auth.update(data, options)
-      else
-        @create(data, options)
+      @create(data, options)
 
-    TentAdmin.tent_client.post.list(
-      params:
-        types: @post_type.toString()
-        mentions: "#{app.get('entity')} #{app.get('id')}"
-        max_refs: 10
-        limit: 1
-
-      callback: callbackFn
+    @fetch(params,
+      success: successFn
+      failure: failureFn
     )
 
   @create: (data, options = {}) =>
@@ -149,4 +174,11 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
       ]
       callback: callbackFn
     )
+
+  toJSON: =>
+    attrs = {}
+    for k in (@fields || [])
+      continue if k == 'credentials'
+      attrs[k] = @[k]
+    attrs
 
