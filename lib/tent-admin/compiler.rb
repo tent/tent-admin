@@ -43,9 +43,9 @@ module TentAdmin
       if options[:compress]
         # Setup asset compression
         require 'uglifier'
-        require 'yui/compressor'
+        require 'sprockets-rainpress'
         sprockets_environment.js_compressor = Uglifier.new
-        sprockets_environment.css_compressor = YUI::CssCompressor.new
+        sprockets_environment.css_compressor = Sprockets::Rainpress
       end
 
       self.assets_dir ||= TentAdmin.settings[:public_dir]
