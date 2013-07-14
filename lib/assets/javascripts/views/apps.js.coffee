@@ -10,7 +10,7 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
 
     @pagination_frozen = true
 
-    @collection = TentAdmin.Collections.Apps.find(entity: TentAdmin.config.current_user.entity) || new TentAdmin.Collections.Apps
+    @collection = TentAdmin.Collections.Apps.find(entity: TentAdmin.config.meta.entity) || new TentAdmin.Collections.Apps
     @collection.on 'reset', => @render()
     @collection.on 'append', @appendRender
     @collection.fetch({}, complete: (=> @pagination_frozen = false ))

@@ -9,7 +9,7 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
 
     @on 'ready', @bindForm
 
-    @meta_profile = TentAdmin.Models.MetaProfile.find(entity: TentAdmin.config.current_user.entity, fetch: false) || new TentAdmin.Models.MetaProfile
+    @meta_profile = TentAdmin.Models.MetaProfile.find(entity: TentAdmin.config.meta.entity, fetch: false) || new TentAdmin.Models.MetaProfile
     @meta_profile.on 'change:avatar_url', => @render()
     @meta_profile.on 'save:failure', @saveFailure
     @meta_profile.on 'save:success', @saveSuccess

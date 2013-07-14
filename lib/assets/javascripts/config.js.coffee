@@ -23,9 +23,9 @@ new Marbles.HTTP(
       TentAdmin.config[key] = val
 
     TentAdmin.tent_client = new TentClient(
-      TentAdmin.config.current_user.entity,
-      credentials: TentAdmin.config.current_user.credentials
-      server_meta_post: TentAdmin.config.current_user.server_meta_post
+      TentAdmin.config.meta.entity,
+      credentials: TentAdmin.config.credentials
+      server_meta_post: { content: TentAdmin.config.meta }
     )
 
     TentAdmin.config_ready = true

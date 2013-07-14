@@ -50,7 +50,7 @@ Marbles.Views.App = class AppView extends Marbles.View
         @showSuccess(app_cid, "Successfully deleted #{model.get('content.name')}!")
         app_el.remove()
 
-        if model.get('id') == TentAdmin.config.current_user.app.id
+        if model.get('id') == TentAdmin.config.app.id
           # we just deleted this app, wait a few seconds then signout
           setTimeout(( => window.location.reload()), 2000)
 

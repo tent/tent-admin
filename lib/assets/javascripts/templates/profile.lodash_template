@@ -1,4 +1,4 @@
-<h1 class='page-header'>Profile <small><%= current_user.entity %></small></h1>
+<h1 class='page-header'>Profile <small><%= meta.entity %></small></h1>
 
 <% if (flash_message) { %>
   <div class='alert alert-<%- flash_message.type %>'><%- flash_message.text %></div>

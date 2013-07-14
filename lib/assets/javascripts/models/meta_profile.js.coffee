@@ -65,5 +65,5 @@ TentAdmin.Models.MetaProfile = class  MetaProfileModel extends Marbles.Model
     @server_meta
 
 TentAdmin.once 'config:ready', =>
-  server_meta_post = TentAdmin.config.current_user.server_meta_post
+  server_meta_post = { content: TentAdmin.config.meta }
   TentAdmin.meta_profile = new MetaProfileModel(server_meta_post)
