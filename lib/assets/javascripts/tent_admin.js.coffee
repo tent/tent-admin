@@ -1,3 +1,4 @@
+#= require_tree ./core_ext
 #= require tent-client
 #= require ./config
 #= require_self
