@@ -1,5 +1,17 @@
 require 'tent-admin/compiler'
 
+TentAdmin.configure
+
+namespace :icing do
+  require 'icing/tasks/assets'
+  Icing.settings[:public_dir] = TentAdmin.settings[:public_dir]
+end
+
+namespace :marbles do
+  require 'marbles-js/tasks/assets'
+  MarblesJS.settings[:public_dir] = TentAdmin.settings[:public_dir]
+end
+
 namespace :assets do
   task :compile do
     TentAdmin::Compiler.compile_assets
@@ -17,5 +29,5 @@ namespace :assets do
   end
 
   # deploy assets when deploying to heroku
-  task :precompile => :deploy
+  task :precompile => [:deploy, 'icing:assets:precompile', 'marbles:assets:precompile']
 end
