@@ -15,6 +15,7 @@ namespace :marbles do
   task :configure do
     TentAdmin.configure
     MarblesJS.settings[:public_dir] = TentAdmin.settings[:public_dir]
+    MarblesJS::Compiler.compile_vendor = true
   end
 end
 
