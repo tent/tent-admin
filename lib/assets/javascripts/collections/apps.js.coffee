@@ -5,7 +5,7 @@ TentAdmin.Collections.Apps = class AppsCollection extends Marbles.Collection
 
   constructor: ->
     super
-    @set('entity', TentAdmin.config.meta.entity)
+    @set('entity', TentAdmin.config.meta.content.entity)
 
   pagination: {}
 
@@ -29,7 +29,7 @@ TentAdmin.Collections.Apps = class AppsCollection extends Marbles.Collection
       @trigger('fetch:complete', models, res, xhr, params, options)
 
     params = _.extend {
-      entity: TentAdmin.config.meta.entity
+      entity: TentAdmin.config.meta.content.entity
       types: [@constructor.model.post_type]
     }, params
 

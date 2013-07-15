@@ -13,7 +13,7 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
     @on 'ready', @bindForm
 
     TentAdmin.Models.App.find(
-      { post: @params.client_id, entity: TentAdmin.config.meta.entity },
+      { post: @params.client_id, entity: TentAdmin.config.meta.content.entity },
       success: (app, xhr) =>
         @app_cid = app.cid
 
