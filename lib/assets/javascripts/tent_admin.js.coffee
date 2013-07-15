@@ -1,5 +1,3 @@
-#= require lodash
-#= require marbles
 #= require tent-client
 #= require ./config
 #= require_self
