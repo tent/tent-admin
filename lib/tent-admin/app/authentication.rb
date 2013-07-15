@@ -8,7 +8,7 @@ module TentAdmin
           if @options[:redirect] == false
             [404, env['response.headers'] || {}, []]
           else
-            redirect('/auth/tent', env)
+            redirect('/auth/tent')
           end
         end
       end
