@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/jvatic/marbles-js.git
-  revision: 6b41f4a4c420561323cd5a71458f15a7a8071753
+  revision: eb96623ce556cb6b05796f1b9b3434be74dec3df
   branch: master
   specs:
     marbles-js (0.0.3)
@@ -36,7 +36,7 @@ GIT
 
 GIT
   remote: git://github.com/tent/icing.git
-  revision: 962f3757d760639aca8ce4717a8657570eb20217
+  revision: 8d4d925fb6260b3ae7ae6283aba441bb529c2e25
   branch: master
   specs:
     icing (0.0.1)
