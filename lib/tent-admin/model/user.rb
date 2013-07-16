@@ -84,7 +84,8 @@ module TentAdmin
           :meta => server_meta_post,
           :app => {
             :id => app['id']
-          }
+          },
+          :protected_apps => [app['id']]
         }
       end
     end

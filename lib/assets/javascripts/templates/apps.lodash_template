@@ -2,6 +2,6 @@
 
 <ul class='unstyled apps'>
   <% _.forEach(apps, function(app) { %>
-    <%= partials._app.render({ app: app }) %>
+    <%= partials._app.render({ app: app, protected_apps: protected_apps }) %>
   <% }) %>
 </ul>

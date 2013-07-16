@@ -19,6 +19,7 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
 
   context: =>
     apps: @collection.models()
+    protected_apps: TentAdmin.config.protected_apps || []
 
   appendRender: (models) =>
     ul = Marbles.DOM.querySelector('ul.apps', @el)
