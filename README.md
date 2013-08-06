@@ -21,6 +21,7 @@ JSON_CONFIG_URL      | `:json_config_url`      | Optional | URL where `config.js
 SIGNOUT_URL          | `:signout_url`          | Optional | URL where sign-out action is located. Defaults to `/signout`.
 SIGNOUT_REDIRECT_URL | `:signout_redirect_url` | Optional | URL to redirect to after signing out.
 APP_ASSET_MANIFEST   |                         | Optional | File path to existing JSON asset manifest.
+SKIP_AUTHENTICATION  | `:skip_authentication`  | Optional | Bypasses OAuth flow when set to `true`. This only works when config.json is loaded from another source.
 
 ### Running on it's own
 

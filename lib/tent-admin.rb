@@ -54,6 +54,9 @@ module TentAdmin
 
     self.settings[:asset_manifest] = Yajl::Parser.parse(File.read(ENV['APP_ASSET_MANIFEST'])) if ENV['APP_ASSET_MANIFEST'] && File.exists?(ENV['APP_ASSET_MANIFEST'])
 
+    # bypass oauth when true
+    self.settings[:skip_authentication] = (options[:skip_authentication] == true) || (ENV['SKIP_AUTHENTICATION'] == 'true')
+
     # App registration, oauth callback uri
     self.settings[:redirect_uri] = "#{self.settings[:url].to_s.sub(%r{/\Z}, '')}/auth/tent/callback"
 
@@ -74,8 +77,13 @@ module TentAdmin
     self.configure(options)
 
     require 'tent-admin/app'
-    require 'tent-admin/model'
-    Model.new
+
+    unless self.settings[:skip_authentication]
+      # We only need a database when authentication is enabled
+      require 'tent-admin/model'
+      Model.new
+    end
+
     App.new
   end
 end

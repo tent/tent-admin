@@ -90,27 +90,29 @@ module TentAdmin
       b.use AssetServer
     end
 
-    match %r{\A/auth/tent(/callback)?} do |b|
-      b.use OmniAuth::Builder do
-        provider :tent, {
-          :get_app => AppLookup,
-          :on_app_created => AppCreate,
-          :app => {
-            :name => TentAdmin.settings[:name],
-            :description => TentAdmin.settings[:description],
-            :url => TentAdmin.settings[:display_url],
-            :redirect_uri => TentAdmin.settings[:redirect_uri],
-            :read_types => TentAdmin.settings[:read_types],
-            :write_types => TentAdmin.settings[:write_types],
-            :scopes => TentAdmin.settings[:scopes]
+    unless TentAdmin.settings[:skip_authentication]
+      match %r{\A/auth/tent(/callback)?} do |b|
+        b.use OmniAuth::Builder do
+          provider :tent, {
+            :get_app => AppLookup,
+            :on_app_created => AppCreate,
+            :app => {
+              :name => TentAdmin.settings[:name],
+              :description => TentAdmin.settings[:description],
+              :url => TentAdmin.settings[:display_url],
+              :redirect_uri => TentAdmin.settings[:redirect_uri],
+              :read_types => TentAdmin.settings[:read_types],
+              :write_types => TentAdmin.settings[:write_types],
+              :scopes => TentAdmin.settings[:scopes]
+            }
           }
-        }
+        end
+        b.use OmniAuthCallback
       end
-      b.use OmniAuthCallback
-    end
 
-    post '/signout' do |b|
-      b.use Signout
+      post '/signout' do |b|
+        b.use Signout
+      end
     end
 
     get '/config.json' do |b|
