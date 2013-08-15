@@ -40,7 +40,7 @@ module TentAdmin
     self.settings[:status_url]           = options[:status_url]           || ENV['STATUS_URL']
     self.settings[:search_url]           = options[:search_url]           || ENV['SEARCH_URL']
     self.settings[:path_prefix]          = options[:path_prefix]          || ENV['PATH_PREFIX']
-    self.settings[:public_dir]           = options[:public_dir]           || File.expand_path('../../public/assets', __FILE__) # lib/../public/assets
+    self.settings[:public_dir]           = options[:public_dir]           || ENV['ASSETS_DIR'] || File.expand_path('../../public/assets', __FILE__) # lib/../public/assets
     self.settings[:database_url]         = options[:database_url]         || ENV['DATABASE_URL']
     self.settings[:database_logfile]     = options[:database_logfile]     || ENV['DATABASE_LOGFILE'] || STDOUT
     self.settings[:asset_root]           = options[:asset_root]           || ENV['ASSET_ROOT']

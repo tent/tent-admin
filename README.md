@@ -22,6 +22,7 @@ SIGNOUT_URL          | `:signout_url`          | Optional | URL where sign-out a
 SIGNOUT_REDIRECT_URL | `:signout_redirect_url` | Optional | URL to redirect to after signing out.
 APP_ASSET_MANIFEST   |                         | Optional | File path to existing JSON asset manifest.
 SKIP_AUTHENTICATION  | `:skip_authentication`  | Optional | Bypasses OAuth flow when set to `true`. This only works when config.json is loaded from another source.
+ASSETS_DIR           | `:public_dir`           | Optional | Defaults to `public/assets`.
 
 ### Running on it's own
 
