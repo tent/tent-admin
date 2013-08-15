@@ -22,14 +22,14 @@ GIT
 
 GIT
   remote: git://github.com/jvatic/marbles-js.git
-  revision: 7e31ab7c91d2d2fcfb9996731ea6f166ecbf3833
+  revision: 22965b245e82ed6490e61575ad7e7504dbd92d15
   branch: master
   specs:
     marbles-js (0.0.3)
 
 GIT
   remote: git://github.com/tent/hawk-ruby.git
-  revision: b65f1f9c9420e2de6c2fa5bba24b2b5befda7f90
+  revision: 101ccd5183701df0ea2728396ee9c31f6c2ffc86
   branch: master
   specs:
     hawk-auth (0.2.0)
@@ -48,7 +48,7 @@ GIT
 
 GIT
   remote: git://github.com/tent/marbles-tent-client-js.git
-  revision: 6014ed324b64fcc68bda99453b1e742a08e4a653
+  revision: e4f438f951be09fee2fb7e827e2b018715e3d4e3
   branch: master
   specs:
     marbles-tent-client-js (0.0.1)
