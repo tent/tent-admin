@@ -104,20 +104,40 @@ module TentAdmin
       end
     end
 
-    def compile_layout
+    def compile_layout(options = {})
       puts "Compiling layout..."
 
       configure_layout
 
-      require 'tent-admin/app'
-      status, headers, body = TentAdmin::App::RenderView.new(lambda {}).call(layout_env)
+      # compile 2 versions of the layout
+      # the first (default) with the app nav
+      # and the second (public facing) without
+      [false, true].each do |is_public|
+        if is_public
+          layout_path = self.layout_path.sub(/(.+)\.html/) { "#{$1}_public.html" }
+        else
+          layout_path = self.layout_path
+        end
+        TentAdmin.settings[:render_app_nav] = !is_public
 
-      system "rm #{layout_path}" if File.exists?(layout_path)
-      File.open(layout_path, "w") do |file|
-        file.write(body.first)
+        require 'tent-admin/app'
+        status, headers, body = TentAdmin::App::RenderView.new(lambda {}).call(layout_env)
+
+        system "rm #{layout_path}" if File.exists?(layout_path)
+        File.open(layout_path, "w") do |file|
+          file.write(body.first)
+        end
+
+        if options[:gzip]
+          system "gzip -c #{layout_path} > #{layout_path}.gz"
+        end
+
+        puts "Layout compiled to #{layout_path}"
       end
+    end
 
-      puts "Layout compiled to #{layout_path}"
+    def gzip_layout
+      compile_layout(:gzip => true)
     end
   end
 end
