@@ -50,20 +50,40 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
       { post: app.get('id'), type: app.get('type') }
     ]
 
-    successFn = (app_auth, xhr) =>
+    fetchSuccessFn = (app_auth, xhr) =>
       app_auth.update(data, options)
 
-    failureFn = (res, xhr) =>
+    createSuccessFn = (app_auth, xhr) =>
+      app_refs = _.reject app.get('refs') || [], (ref) -> ref.type == app_auth.get('type')
+      app_refs.push({
+        type: app_auth.get('type')
+        post: app_auth.get('id')
+        entity: app_auth.get('entity')
+      })
+      app.update({ refs: app_refs }, {
+        success: (_app, xhr) =>
+          options.success?(app_auth, xhr)
+          options.complete?(app_auth, xhr)
+
+        failure: (res, xhr) =>
+          options.failure?(res, xhr)
+          options.complete?(res, xhr)
+      })
+
+    fetchFailureFn = (res, xhr) =>
       unless xhr.status == 200
         options.failure?(res, xhr)
         options.complete?(res, xhr)
         return
 
-      @create(data, options)
+      @create(data,
+        success: createSuccessFn
+        failure: options.failure
+      )
 
     @fetch(params,
-      success: successFn
-      failure: failureFn
+      success: fetchSuccessFn
+      failure: fetchFailureFn
     )
 
   @create: (data, options = {}) =>

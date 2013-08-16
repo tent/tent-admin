@@ -15,6 +15,31 @@ TentAdmin.Models.App = class AppModel extends Marbles.Model
 
     TentAdmin.tent_client.post.get(params: params, callback: callbackFn)
 
+  update: (data, options = {}) =>
+    data = _.extend @toJSON(), {
+      version: {
+        parents: [{
+          version: @get('version.id')
+        }]
+      }
+    }, data
+
+    TentAdmin.tent_client.post.update(
+      params: {
+        entity: @get('entity')
+        post: @get('id')
+      }
+      body: data
+      callback: (res, xhr) =>
+        if xhr.status == 200
+          @parseAttributes(res.post)
+          options.success?(@, xhr)
+        else
+          options.failure?(res, xhr)
+
+        options.complete?(res, xhr)
+    )
+
   delete: (options = {}) =>
     success = (xhr) =>
       options.success?(@, xhr)

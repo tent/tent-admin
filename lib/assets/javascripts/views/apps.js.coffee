@@ -13,7 +13,9 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
     @collection = TentAdmin.Collections.Apps.find(entity: TentAdmin.config.meta.content.entity) || new TentAdmin.Collections.Apps
     @collection.on 'reset', => @render()
     @collection.on 'append', @appendRender
-    @collection.fetch({}, complete: (=> @pagination_frozen = false ))
+    @collection.fetch({
+      max_refs: 2
+    }, complete: (=> @pagination_frozen = false ))
 
     @render()
 
