@@ -41,7 +41,9 @@ TentAdmin.Collections.Apps = class AppsCollection extends Marbles.Collection
       last: @pagination.last
     }, res.pages)
 
-    data = res.posts
+    # reject any apps that don't ref an app auth
+    data = _.reject res.posts, (_post) ->
+      !_post.refs?.length || !_.find(_post.refs, ((_r) -> _r.type == TentAdmin.Models.AppAuth.post_type.toString()))
 
     models = if options.append
       @appendJSON(data)

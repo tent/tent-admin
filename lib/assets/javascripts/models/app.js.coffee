@@ -54,10 +54,26 @@ TentAdmin.Models.App = class AppModel extends Marbles.Model
       else
         failure(data, xhr)
 
+    # find app auth ref
+    ref = _.find @get('refs') || [], (_ref) -> _ref.type == TentAdmin.Models.AppAuth.post_type.toString()
+    unless ref
+      # return an error if ref not found
+      return failure({ error: "App does not ref app auth" }, {})
+
+    deleteAuthComplete = (res, xhr) =>
+      # remove auth ref
+      if xhr.status == 200
+        refs = _.reject @get('refs') || [], (_ref) -> _ref.type == ref.type
+        @update({ refs: refs }, { complete: complete })
+      else
+        failure(res, xhr)
+
+    # delete app auth
     TentAdmin.tent_client.post.delete(
-      params:
-        entity: @get('entity')
-        post: @get('id')
-      callback: complete
+      params: {
+        entity: ref.entity || @get('entity')
+        post: ref.post
+      }
+      callback: deleteAuthComplete
     )
 
