@@ -11,8 +11,8 @@
     </thead>
 
     <tbody>
-      <% read_types = app.get('content.types.read').sort() %>
-      <% write_types = app.get('content.types.write').sort() %>
+      <% read_types = (app.get('content.types.read') || []).sort() %>
+      <% write_types = (app.get('content.types.write') || []).sort() %>
       <% for (var index=0, _len=Math.max(read_types.length, write_types.length); index < _len; index++) { %>
         <tr>
           <td>
