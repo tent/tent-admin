@@ -23,7 +23,7 @@ module TentAdmin
         https://tent.io/types/meta/v0#
         https://tent.io/types/basic-profile/v0#
       ),
-      :scopes => %w()
+      :scopes => %w( permissions )
     }
   end
 
