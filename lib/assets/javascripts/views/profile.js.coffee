@@ -13,6 +13,7 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
     @meta_profile.on 'change:avatar_url', => @render()
     @meta_profile.on 'save:failure', @saveFailure
     @meta_profile.on 'save:success', @saveSuccess
+    @meta_profile.on 'error:avatar_size', @showError
 
     @render()
 
@@ -37,6 +38,9 @@ Marbles.Views.Profile = class ProfileView extends Marbles.View
     avatar = data['meta_profile[avatar]']?[0]
     return unless avatar
     @meta_profile.set('avatar', avatar)
+
+  showError: (msg) =>
+    @render(@context flash_message: { text: msg, type: 'error' })
 
   saveFailure: (data, xhr) =>
     @render(@context flash_message: { text: "Failed to save: #{data.error}", type: 'error' })

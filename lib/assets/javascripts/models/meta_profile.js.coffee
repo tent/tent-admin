@@ -29,6 +29,9 @@ TentAdmin.Models.MetaProfile = class  MetaProfileModel extends Marbles.Model
 
   avatarUpdated: (value) =>
     if value
+      if value.size > 1000000
+        return @trigger('error:avatar_size', "Avatar must be 1MB or less. The one you have selected is #{TentAdmin.Helpers.formatStorageAmount(value.size)}.")
+
       reader = new FileReader
       reader.onload = (e) =>
         @set('avatar_url', e.target.result)

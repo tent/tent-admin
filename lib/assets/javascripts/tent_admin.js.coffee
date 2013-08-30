@@ -13,7 +13,18 @@ _.extend window.TentAdmin, Marbles.Events, {
   Models: {}
   Collections: {}
   Routers: {}
-  Helpers: {}
+  Helpers: {
+
+    # takes amount in bytes
+    formatStorageAmount: (amount) ->
+      if amount >= 1000000000 # >= 1GB
+        "#{parseInt((amount / 1000 / 1000 / 1000) * 100) / 100 || 0}GB"
+      else if amount >= 1000000 # >= 1MB
+        "#{parseInt((amount / 1000 / 1000) * 100) / 100 || 0}MB"
+      else
+        "#{parseInt((amount / 1000) * 100) / 100 || 0}KB"
+
+  }
 
   run: ->
     Marbles.View.templates ?= window.LoDashTemplates
