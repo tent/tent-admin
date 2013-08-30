@@ -9,18 +9,30 @@ unless TentAdmin.config.JSON_CONFIG_URL
 new Marbles.HTTP(
   method: 'GET'
   url: TentAdmin.config.JSON_CONFIG_URL
-  middleware: [{
-    processRequest: (request) ->
-      request.request.xmlhttp.withCredentials = true
-  }]
+  middleware: [Marbles.HTTP.Middleware.WithCredentials]
   callback: (res, xhr) ->
     if xhr.status != 200
-      return setImmediate =>
-        throw "failed to load json config via GET #{TentAdmin.config.JSON_CONFIG_URL}: #{xhr.status} #{JSON.stringify(res)}"
+      # Redirect to signin
+
+      setImmediate ->
+        TentAdmin.run(history: { silent: true })
+
+        fragment = Marbles.history.getFragment()
+        if fragment.match /^signin/
+          Marbles.history.navigate(fragment, trigger: true, replace: true)
+        else
+          if fragment == ""
+            Marbles.history.navigate("/signin", trigger: true)
+          else
+            Marbles.history.navigate("/signin?redirect=#{encodeURIComponent(Marbles.history.getFragment())}", trigger: true)
+
+      return
 
     TentAdmin.config ?= {}
     for key, val of JSON.parse(res)
       TentAdmin.config[key] = val
+
+    TentAdmin.config.authenticated = !!TentAdmin.config.credentials
 
     TentAdmin.tent_client = new TentClient(
       TentAdmin.config.meta.content.entity,

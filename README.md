@@ -21,6 +21,7 @@ ASSET_CACHE_DIR      | `:asset_cache_dir`      | Optional | Filesystem path for 
 JSON_CONFIG_URL      | `:json_config_url`      | Optional | URL where `config.json` is served from. Defaults to `/config.json`.
 SIGNOUT_URL          | `:signout_url`          | Optional | URL where sign-out action is located. Defaults to `/signout`.
 SIGNOUT_REDIRECT_URL | `:signout_redirect_url` | Optional | URL to redirect to after signing out.
+SIGNIN_URL           | `:signin_url`           | Optional | URL accepting a POST request with form encoded `username` and `passphrase` to authorize `config.json`.
 APP_ASSET_MANIFEST   |                         | Optional | File path to existing JSON asset manifest.
 SKIP_AUTHENTICATION  | `:skip_authentication`  | Optional | Bypasses OAuth flow when set to `true`. This only works when config.json is loaded from another source.
 ASSETS_DIR           | `:public_dir`           | Optional | Defaults to `public/assets`.

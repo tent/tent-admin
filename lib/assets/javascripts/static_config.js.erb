@@ -5,5 +5,6 @@ TentAdmin.config = {
   JSON_CONFIG_URL: <%= Yajl::Encoder.encode(TentAdmin.settings[:json_config_url]) %>,
   SIGNOUT_URL: <%= Yajl::Encoder.encode(TentAdmin.settings[:signout_url]) %>,
   SIGNOUT_REDIRECT_URL: <%= Yajl::Encoder.encode(TentAdmin.settings[:signout_redirect_url]) %>,
+  SIGNIN_URL: <%= Yajl::Encoder.encode(TentAdmin.settings[:signin_url]) %>,
   PATH_PREFIX: <%= Yajl::Encoder.encode(TentAdmin.settings[:path_prefix]) %>,
 }

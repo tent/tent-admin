@@ -26,9 +26,11 @@ _.extend window.TentAdmin, Marbles.Events, {
 
   }
 
-  run: ->
+  run: (options = {}) ->
     Marbles.View.templates ?= window.LoDashTemplates
     return if !Marbles.history || Marbles.history.started
+
+    @hideLoadingIndicator()
 
     @showLoadingIndicator()
     @once 'ready', @hideLoadingIndicator
@@ -44,7 +46,7 @@ _.extend window.TentAdmin, Marbles.Events, {
 
     Marbles.DOM.on window, 'scroll', (e) => @trigger 'window:scroll', e
 
-    Marbles.history.start(root: (@config.PATH_PREFIX || '') + '/')
+    Marbles.history.start(_.extend({ root: (@config.PATH_PREFIX || '') + '/' }, options.history || {}))
 
     @ready = true
     @trigger 'ready'
