@@ -17,6 +17,7 @@ STATUS_URL           | `:status_url`           | Optional | URL of status app (a
 SEARCH_URL           | `:search_url`           | Optional | URL of search app (adds a link in the global nav).
 PATH_PREFIX          | `:path_prefix`          | Optional | Path prefix if app isn't mounted at the domain root.
 ASSET_ROOT           | `:asset_root`           | Optional | Root URL where assets are served from. Defaults to `/assets`.
+ASSET_CACHE_DIR      | `:asset_cache_dir`      | Optional | Filesystem path for sprockets asset cache dir.
 JSON_CONFIG_URL      | `:json_config_url`      | Optional | URL where `config.json` is served from. Defaults to `/config.json`.
 SIGNOUT_URL          | `:signout_url`          | Optional | URL where sign-out action is located. Defaults to `/signout`.
 SIGNOUT_REDIRECT_URL | `:signout_redirect_url` | Optional | URL to redirect to after signing out.

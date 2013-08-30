@@ -44,6 +44,7 @@ module TentAdmin
     self.settings[:database_url]         = options[:database_url]         || ENV['DATABASE_URL']
     self.settings[:database_logfile]     = options[:database_logfile]     || ENV['DATABASE_LOGFILE'] || STDOUT
     self.settings[:asset_root]           = options[:asset_root]           || ENV['ASSET_ROOT']
+    self.settings[:asset_cache_dir]      = options[:asset_cache_dir]      || ENV['ASSET_CACHE_DIR']
     self.settings[:json_config_url]      = options[:json_config_url]      || ENV['JSON_CONFIG_URL']
     self.settings[:signout_url]          = options[:signout_url]          || ENV['SIGNOUT_URL']
     self.settings[:signout_redirect_url] = options[:signout_redirect_url] || ENV['SIGNOUT_REDIRECT_URL']

@@ -34,6 +34,8 @@ module TentAdmin
             env.context_class.class_eval do
               include SprocketsHelpers
             end
+
+            env.cache = Sprockets::Cache::FileStore.new(TentAdmin.settings[:asset_cache_dir]) if TentAdmin.settings[:asset_cache_dir]
           end
 
           paths = %w[ javascripts stylesheets images fonts ]
