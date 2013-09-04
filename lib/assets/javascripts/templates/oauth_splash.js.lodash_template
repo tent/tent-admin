@@ -1,1 +1,7 @@
-<p class='alert alert-info'>Please Wait...</p>
+<p class='alert <% if (context.error) { %>alert-error<% } else { %>alert-info<% } %>'>
+  <% if (context.msg) { %>
+    <%- context.msg %>
+  <% } else { %>
+    Please Wait...
+  <% } %>
+</p>

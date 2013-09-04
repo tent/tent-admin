@@ -54,7 +54,7 @@
   <% } %>
 
   <div class='form-actions'>
-    <input class='btn btn-success' type='submit' value='Allow Access' />
+    <input class='btn btn-success' type='submit' data-disable-with='Please wait...' value='Allow Access' />
     <input class='btn pull-right' type='button' value='No Thanks' data-access='deny' />
   </div>
 </form>

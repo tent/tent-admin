@@ -60,6 +60,7 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
         )
 
       failure: (res, xhr) =>
+        TentAdmin.trigger('oauth:failure', "Failed to lookup app, invalid client id!")
         console.error("Failed to lookup app!", xhr.status, res, xhr)
     )
 
@@ -68,11 +69,22 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
     return unless @elements.form
 
     @elements.form_deny = Marbles.DOM.querySelector('[data-access=deny]', @elements.form)
+    @elements.form_submit = Marbles.DOM.querySelector('[type=submit]', @elements.form)
+
+    @text = {
+      submit: @elements.form_submit.value
+      submit_wait: Marbles.DOM.attr(@elements.form_submit, 'data-disable-with')
+    }
+
     Marbles.DOM.on @elements.form, 'submit', @handleFormSubmit
     Marbles.DOM.on @elements.form_deny, 'click', @handleUserAbort
 
   handleFormSubmit: (e) =>
     e?.preventDefault()
+
+    @elements.form_submit.disabled = true
+    @elements.form_submit.value = @text.submit_wait
+
     data = Marbles.DOM.serializeForm(@elements.form, expand_nested: true)
 
     read_types = []
