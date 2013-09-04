@@ -5,6 +5,23 @@ TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
     "apps"    : "apps"
   }
 
+  authenticationRequired: (callback) ->
+    return callback() if TentAdmin.config.authenticated
+
+    # Redirect to signin
+
+    setImmediate ->
+      TentAdmin.run(history: { silent: true })
+
+      fragment = Marbles.history.getFragment()
+      if fragment.match /^signin/
+        Marbles.history.navigate(fragment, trigger: true, replace: true)
+      else
+        if fragment == ""
+          Marbles.history.navigate("/signin", trigger: true)
+        else
+          Marbles.history.navigate("/signin?redirect=#{encodeURIComponent(Marbles.history.getFragment())}", trigger: true)
+
   resetScrollPosition: =>
     hash_fragment = window.location.hash
     window.scrollTo(0, 0)
@@ -14,9 +31,12 @@ TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
     @navigate('/profile', { replace: true, trigger: true })
 
   profile: =>
-    new Marbles.Views.Profile container: TentAdmin.config.container
-    @resetScrollPosition()
+    @authenticationRequired =>
+      new Marbles.Views.Profile container: TentAdmin.config.container
+      @resetScrollPosition()
 
   apps: =>
-    new Marbles.Views.Apps container: TentAdmin.config.container
-    @resetScrollPosition()
+    @authenticationRequired =>
+      new Marbles.Views.Apps container: TentAdmin.config.container
+      @resetScrollPosition()
+

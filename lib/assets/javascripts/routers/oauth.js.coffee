@@ -3,10 +3,14 @@ TentAdmin.Routers.oauth = new class MainRouter extends Marbles.Router
     "oauth" : "oauthConfirm"
   }
 
+  authenticationRequired: (callback) ->
+    TentAdmin.Routers.main.authenticationRequired(callback)
+
   resetScrollPosition: =>
     TentAdmin.Routers.main.resetScrollPosition()
 
   oauthConfirm: (params) =>
-    new Marbles.Views.OAuthConfirm params: params, container: TentAdmin.config.container
-    @resetScrollPosition()
+    @authenticationRequired =>
+      new Marbles.Views.OAuthConfirm params: params, container: TentAdmin.config.container
+      @resetScrollPosition()
 

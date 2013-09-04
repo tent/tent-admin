@@ -1,3 +1,18 @@
+@import 'icing/settings';
+@import 'icing/common';
+
+// disabled app nav items
+.app-nav-list {
+  a.disabled {
+    color: lighten($grayTextColor, 20%);
+    cursor: default;
+
+    &:hover {
+      color: lighten($grayTextColor, 20%);
+    }
+  }
+}
+
 // _app.lodash_template
 .apps input.btn {
   margin-top: 17px;

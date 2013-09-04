@@ -1,16 +1,13 @@
 Marbles.Views.AppNavigationItem = class AppNavigationItemView extends Marbles.View
   @view_name: 'app_navigation_item'
 
-  @allItems: ->
-    for cid in Marbles.View.instances.app_navigation_item || []
-      Marbles.View.instances.all[cid]
+  @disableAll: ->
+    for cid in Marbles.View.instances.app_navigation_item
+      Marbles.View.instances.all[cid]?.disable()
 
-  @disableAllExcept: (whitelist...) ->
-    for item in @allItems()
-      continue if whitelist.indexOf(item.fragment) != -1
-      item.disable()
-
-  @disableAll: @disableAllExcept
+  @enableAll: ->
+    for cid in Marbles.View.instances.app_navigation_item
+      Marbles.View.instances.all[cid]?.enable()
 
   initialize: =>
     @fragment = Marbles.DOM.attr(@el, 'data-fragment')
