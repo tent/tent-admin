@@ -26,7 +26,6 @@ module TentAdmin
           user.update(:app => app)
         else
           user = super(:entity => entity, :app => app)
-          user.setup_oauth! if TentAdmin.settings[:oauth_enabled]
         end
         user
       end
@@ -61,21 +60,6 @@ module TentAdmin
           end
           post
         end
-      end
-
-      ##
-      # Update meta post to use this app for oauth
-      def setup_oauth!
-        data = Utils::Hash.symbolize_keys(server_meta_post)
-        data[:content][:servers].each do |server|
-          server[:urls][:oauth_auth] = "#{ENV['URL'].sub(%r{/\Z}, '')}/oauth"
-        end
-        data[:version] = { :parents => [{ :version => data[:version][:id] }] }
-        res = client.post.update(data[:entity], data[:id], data)
-        if res.success?
-          @server_meta_post = client.server_meta_post = res.body
-        end
-        res
       end
 
       def json_config

@@ -25,7 +25,6 @@ SIGNIN_URL           | `:signin_url`           | Optional | URL accepting a POST
 APP_ASSET_MANIFEST   |                         | Optional | File path to existing JSON asset manifest.
 SKIP_AUTHENTICATION  | `:skip_authentication`  | Optional | Bypasses OAuth flow when set to `true`. This only works when config.json is loaded from another source.
 ASSETS_DIR           | `:public_dir`           | Optional | Defaults to `public/assets`.
-OAUTH_ENABLED        | `:oauth_enabled`        | Optional | Defaults to `true`. Only applies to the ruby portion of the app. Set to `false` if you don't want the app to modify your meta post to use it for oauth.
 
 ### Running on it's own
 
