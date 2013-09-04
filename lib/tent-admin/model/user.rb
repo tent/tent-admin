@@ -26,7 +26,7 @@ module TentAdmin
           user.update(:app => app)
         else
           user = super(:entity => entity, :app => app)
-          user.setup_oauth!
+          user.setup_oauth! if TentAdmin.settings[:oauth_enabled]
         end
         user
       end
