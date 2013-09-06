@@ -61,9 +61,16 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
         entity: app_auth.get('entity')
       })
       app.update({ refs: app_refs }, {
-        success: (_app, xhr) =>
-          options.success?(app_auth, xhr)
-          options.complete?(app_auth, xhr)
+        success: (app, xhr) =>
+          data = app_auth.toJSON()
+          data.mentions ?= [
+            { post: app.get('id'), version: app.get('version.id'), type: app.get('type') }
+          ]
+          data.refs = [
+            { post: app.get('id'), version: app.get('version.id'), type: app.get('type') }
+          ]
+
+          app_auth.update(data, options)
 
         failure: (res, xhr) =>
           options.failure?(res, xhr)
@@ -133,8 +140,8 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
         parents: [{ version: @get('version.id') }]
       }
     })
-    data.refs = @get('refs')
-    data.mentions = @get('mentions')
+    data.refs = _.uniq (data.refs || []).concat(@get('refs') || []), (ref) -> ref.type
+    data.mentions = _.uniq (data.mentions || []).concat(@get('mentions') || []), (mention) -> mention.type
 
     TentAdmin.tent_client.post.update(
       params:
