@@ -43,11 +43,11 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
       throw "params.app not given"
 
     data.mentions ?= [
-      { post: app.get('id'), type: app.get('type') }
+      { post: app.get('id'), version: app.get('version.id'), type: app.get('type') }
     ]
 
     data.refs ?= [
-      { post: app.get('id'), type: app.get('type') }
+      { post: app.get('id'), version: app.get('version.id'), type: app.get('type') }
     ]
 
     fetchSuccessFn = (app_auth, xhr) =>

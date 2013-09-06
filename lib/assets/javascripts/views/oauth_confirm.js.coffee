@@ -54,7 +54,9 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
     }
     app_scopes = (app.get('content.scopes') || []).sort()
 
-    if auth_types == app_types && auth_scopes == app_scopes
+    app_ref = _.find app_auth.get('refs'), (ref) -> ref.type == app.get('type')
+
+    if (app_ref.version == app.get('version.id')) || (auth_types == app_types && auth_scopes == app_scopes)
       @handleSuccess(app_auth.get('credentials.content.hawk_key'))
     else
       added_read_types = _.difference(app_types.read, auth_types.read)
