@@ -12,57 +12,75 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
 
     @on 'ready', @bindForm
 
+    @fetchApp(success: @fetchAppSuccess, failure: @fetchAppFailure)
+
+  fetchApp: (options = {}) =>
     TentAdmin.Models.App.find(
       { post: @params.client_id, entity: TentAdmin.config.meta.content.entity },
-      success: (app, xhr) =>
-        @app_cid = app.cid
+      options
+    )
 
-        TentAdmin.Models.AppAuth.fetch({ app: app },
-          success: (app_auth) =>
-            auth_types = {
-              read: (app_auth.get('content.types.read') || []).sort()
-              write: (app_auth.get('content.types.write') || []).sort()
+  fetchAppFailure: (res, xhr) =>
+    TentAdmin.trigger('oauth:failure', "Failed to lookup app, invalid client id!")
+    console.error("Failed to lookup app!", xhr.status, res, xhr)
+
+  fetchAppSuccess: (app) =>
+    @app_cid = app.cid
+
+    @fetchAppAuth(app, success: @fetchAppAuthSuccess, failure: @fetchAppAuthFailure)
+
+  fetchAppAuth: (app, options = {}) =>
+    TentAdmin.Models.AppAuth.fetch({ app: app },
+      success: (app_auth) =>
+        options.success?(app, app_auth)
+
+      failure: (res, xhr) =>
+        options.failure?(app, res, xhr)
+    )
+
+  fetchAppAuthFailure: (app, res, xhr) =>
+    @render(@context(app))
+
+  fetchAppAuthSuccess: (app, app_auth) =>
+    auth_types = {
+      read: (app_auth.get('content.types.read') || []).sort()
+      write: (app_auth.get('content.types.write') || []).sort()
+    }
+    auth_scopes = (app_auth.get('content.scopes') || []).sort()
+
+    app_types = {
+      read: (app.get('content.types.read') || []).sort()
+      write: (app.get('content.types.write') || []).sort()
+    }
+    app_scopes = (app.get('content.scopes') || []).sort()
+
+    if auth_types == app_types && auth_scopes == app_scopes
+      @handleSuccess(app_auth.get('credentials.content.hawk_key'))
+    else
+      added_read_types = _.difference(app_types.read, auth_types.read)
+      added_write_types = _.difference(app_types.write, auth_types.write)
+      added_scopes = _.difference(app_scopes, auth_scopes)
+
+      if added_read_types.length || added_write_types.length || added_scopes.length
+        @render(@context(app))
+      else
+        attrs = {
+          content: {
+            types: {
+              read: app_types.read
+              write: app_types.write
             }
-            auth_scopes = (app_auth.get('content.scopes') || []).sort()
+            scopes: app_scopes
+          }
+        }
 
-            app_types = {
-              read: (app.get('content.types.read') || []).sort()
-              write: (app.get('content.types.write') || []).sort()
-            }
-            app_scopes = (app.get('content.scopes') || []).sort()
-
-            if auth_types == app_types && auth_scopes == app_scopes
-              @handleSuccess(app_auth.get('credentials.content.hawk_key'))
-            else
-              added_read_types = _.difference(app_types.read, auth_types.read)
-              added_write_types = _.difference(app_types.write, auth_types.write)
-              added_scopes = _.difference(app_scopes, auth_scopes)
-
-              if added_read_types.length || added_write_types.length || added_scopes.length
-                @render(@context(app))
-              else
-                app_auth.update({
-                  content:
-                    types:
-                      read: app_types.read
-                      write: app_types.write
-                    scopes: app_scopes
-                },
-                  success: (app_auth, xhr) =>
-                    @handleSuccess(app_auth.get('credentials.content.hawk_key'))
-
-                  failure: (res, xhr) =>
-                    @render(@context(app))
-                )
+        app_auth.update(attrs,
+          success: (app_auth, xhr) =>
+            @handleSuccess(app_auth.get('credentials.content.hawk_key'))
 
           failure: (res, xhr) =>
             @render(@context(app))
         )
-
-      failure: (res, xhr) =>
-        TentAdmin.trigger('oauth:failure', "Failed to lookup app, invalid client id!")
-        console.error("Failed to lookup app!", xhr.status, res, xhr)
-    )
 
   bindForm: =>
     @elements.form = Marbles.DOM.querySelector('form', @el)
@@ -100,11 +118,13 @@ Marbles.Views.OAuthConfirm = class OAuthConfirmView extends Marbles.View
       scopes.push(scope)
 
     data = {
-      content:
-        types:
+      content: {
+        types: {
           read: read_types
           write: write_types
+        }
         scopes: scopes
+      }
     }
 
     TentAdmin.Models.AppAuth.updateOrCreate(
