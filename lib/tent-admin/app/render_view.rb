@@ -67,7 +67,7 @@ module TentAdmin
         end
 
         def full_asset_path(path)
-          "#{asset_root}/#{path}".gsub(%r{/+}, '/')
+          asset_root + "/#{path}".gsub(%r{/+}, '/')
         end
       end
 
