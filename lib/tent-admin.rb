@@ -44,6 +44,7 @@ module TentAdmin
     self.settings[:signout_url]          = options[:signout_url]          || ENV['SIGNOUT_URL']
     self.settings[:signout_redirect_url] = options[:signout_redirect_url] || ENV['SIGNOUT_REDIRECT_URL']
     self.settings[:signin_url]           = options[:signin_url]           || ENV['SIGNIN_URL']
+    self.settings[:default_avatar_root]  = options[:default_avatar_root]  || ENV['DEFAULT_AVATAR_ROOT']
 
     unless settings[:url]
       raise ConfigurationError.new("Missing url option, you need to set URL")

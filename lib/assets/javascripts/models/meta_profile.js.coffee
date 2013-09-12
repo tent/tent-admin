@@ -25,7 +25,7 @@ TentAdmin.Models.MetaProfile = class  MetaProfileModel extends Marbles.Model
     if @get('avatar_digest')
       @set('avatar_url', TentAdmin.tent_client.getNamedUrl('attachment', entity: @get('entity'), digest: @get('avatar_digest')))
     else
-      @set('avatar_url', TentAdmin.config.DEFAULT_AVATAR_URL)
+      @set('avatar_url', TentAdmin.config.defaultAvatarURL(@get('entity')))
 
   avatarUpdated: (value) =>
     if value

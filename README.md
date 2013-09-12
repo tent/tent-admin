@@ -25,6 +25,7 @@ SIGNIN_URL           | `:signin_url`           | Optional | URL accepting a POST
 APP_ASSET_MANIFEST   |                         | Optional | File path to existing JSON asset manifest.
 SKIP_AUTHENTICATION  | `:skip_authentication`  | Optional | Bypasses OAuth flow when set to `true`. This only works when config.json is loaded from another source.
 ASSETS_DIR           | `:public_dir`           | Optional | Defaults to `public/assets`.
+DEFAULT_AVATAR_ROOT  | `:default_avatar_root`  | Optional | Defaults to a static avatar. If set, appending `"/" + encodeURIComponent(entity)` should point to a unique avatar for that entity (see [Sigil](https://github.com/cupcake/sigil) for more information).
 
 ### Running on it's own
 

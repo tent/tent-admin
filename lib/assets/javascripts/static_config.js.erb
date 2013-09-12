@@ -7,4 +7,13 @@ TentAdmin.config = {
   SIGNOUT_REDIRECT_URL: <%= Yajl::Encoder.encode(TentAdmin.settings[:signout_redirect_url]) %>,
   SIGNIN_URL: <%= Yajl::Encoder.encode(TentAdmin.settings[:signin_url]) %>,
   PATH_PREFIX: <%= Yajl::Encoder.encode(TentAdmin.settings[:path_prefix]) %>,
+  DEFAULT_AVATAR_ROOT: <%= Yajl::Encoder.encode(TentAdmin.settings[:default_avatar_root]) %>
+}
+
+TentAdmin.config.defaultAvatarURL = function (entity_uri) {
+  if (!TentAdmin.config.DEFAULT_AVATAR_ROOT) {
+    return;
+  }
+
+  return TentAdmin.config.DEFAULT_AVATAR_ROOT + '/' + encodeURIComponent(entity_uri) + '?w=288&inverted=true';
 }
