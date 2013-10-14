@@ -5,8 +5,8 @@
   <table class='table table-striped'>
     <thead>
       <tr>
-        <th>Read</th>
-        <th>Write</th>
+        <th>Type URI</th>
+        <th></th>
       </tr>
     </thead>
 
@@ -16,19 +16,17 @@
       <% for (var index=0, _len=Math.max(read_types.length, write_types.length); index < _len; index++) { %>
         <tr>
           <td>
-            <% if (index < read_types.length) { %>
-              <label class='control-label'>
-                <input name="read_types[<%- read_types[index] %>]" type="checkbox" checked />&nbsp;<%- read_types[index] %>
-              </label>
-            <% } %>
+            <%- read_types[index] || write_types[index] %>
           </td>
 
           <td>
-            <% if (index < write_types.length) { %>
-              <label class='control-label'>
-                <input name="write_types[<%- write_types[index] %>]" type="checkbox" checked />&nbsp;<%- write_types[index] %>
-              </label>
-            <% } %>
+            <label class='control-label'>
+              <input name="read_types[<%- read_types[index] %>]" type="checkbox" <% if (index < read_types.length ) { %>checked<% } %> />&nbsp;Read
+            </label>
+
+            <label class='control-label'>
+              <input name="write_types[<%- write_types[index] %>]" type="checkbox" <% if (index < write_types.length ) { %>checked<% } %> />&nbsp;Write
+            </label>
           </td>
         </tr>
       <% } %>
