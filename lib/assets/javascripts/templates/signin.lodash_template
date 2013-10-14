@@ -6,7 +6,7 @@
   <div class='control-group'>
     <label>Username</label>
     <div class='input-append'>
-      <input name='username' type='text'>
+      <input name='username' type='text' autocapitalize="off" autocorrect="off" autocomplete="off" />
       <span class='add-on'><i></i></span>
     </div>
   </div>
@@ -14,7 +14,7 @@
   <div class='control-group'>
     <label>Password</label>
     <div class='input-append'>
-      <input name='passphrase' type='password'>
+      <input name='passphrase' type='password' />
       <span class='add-on'><i></i></span>
     </div>
   </div>
