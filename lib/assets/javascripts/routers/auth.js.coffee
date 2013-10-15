@@ -1,6 +1,7 @@
 TentAdmin.Routers.auth = new class AuthRouter extends Marbles.Router
   routes: {
     "signin" : "signin"
+    "reauth" : "reauth"
   }
 
   signin: (params) =>
@@ -15,4 +16,11 @@ TentAdmin.Routers.auth = new class AuthRouter extends Marbles.Router
     Marbles.Views.AppNavigationItem.disableAll()
 
     new Marbles.Views.Signin container: TentAdmin.config.container, redirect_url: params.redirect
+
+  reauth: (params) =>
+    Marbles.Views.AuthButton.performSignout (res, xhr) =>
+      TentAdmin.config.authenticated = false if xhr.status == 200
+
+      @signin(params)
+
 

@@ -5,3 +5,9 @@
     Please Wait...
   <% } %>
 </p>
+
+<% if (context.error && TentAdmin.config.SIGNIN_URL) { %>
+  <p class='alert alert-warning'>
+    You are signed in as <%- TentAdmin.config.meta.content.entity %>. <a href='<%- (TentAdmin.config.PATH_PREFIX || '/') + 'reauth?redirect=' + encodeURIComponent(window.location.pathname + window.location.search) %>'>Sign in to another account</a>.
+  </p>
+<% } %>
