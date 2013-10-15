@@ -6,7 +6,6 @@
     <thead>
       <tr>
         <th>Type URI</th>
-        <th></th>
       </tr>
     </thead>
 
@@ -16,17 +15,17 @@
       <% for (var index=0, _len=Math.max(read_types.length, write_types.length); index < _len; index++) { %>
         <tr>
           <td>
-            <%- read_types[index] || write_types[index] %>
-          </td>
+            <span class='type-uri'><%- read_types[index] || write_types[index] %></span>
 
-          <td>
-            <label class='control-label'>
-              <input name="read_types[<%- read_types[index] %>]" type="checkbox" <% if (index < read_types.length ) { %>checked<% } %> />&nbsp;Read
-            </label>
+            <div class='clearfix'>
+              <label class='control-label pull-left read-write-label'>
+                <input name="read_types[<%- read_types[index] %>]" type="checkbox" <% if (index < read_types.length ) { %>checked<% } %> />&nbsp;Read
+              </label>
 
-            <label class='control-label'>
-              <input name="write_types[<%- write_types[index] %>]" type="checkbox" <% if (index < write_types.length ) { %>checked<% } %> />&nbsp;Write
-            </label>
+              <label class='control-label pull-left read-write-label'>
+                <input name="write_types[<%- write_types[index] %>]" type="checkbox" <% if (index < write_types.length ) { %>checked<% } %> />&nbsp;Write
+              </label>
+            </div>
           </td>
         </tr>
       <% } %>
