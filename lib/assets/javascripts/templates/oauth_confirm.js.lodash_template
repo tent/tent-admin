@@ -10,20 +10,22 @@
     </thead>
 
     <tbody>
-      <% read_types = (app.get('content.types.read') || []).sort() %>
-      <% write_types = (app.get('content.types.write') || []).sort() %>
-      <% for (var index=0, _len=Math.max(read_types.length, write_types.length); index < _len; index++) { %>
+      <% read_types = app.get('content.types.read') || [] %>
+      <% write_types = app.get('content.types.write') || [] %>
+      <% all_types = read_types.concat(write_types).sort() %>
+      <% for (var index=0, _len=all_types.length; index < _len; index++) { %>
+        <% type = all_types[index] %>
         <tr>
           <td>
-            <span class='type-uri'><%- read_types[index] || write_types[index] %></span>
+            <span class='type-uri'><%- type %></span>
 
             <div class='clearfix'>
               <label class='control-label pull-left read-write-label'>
-                <input name="read_types[<%- read_types[index] %>]" type="checkbox" <% if (index < read_types.length ) { %>checked<% } %> />&nbsp;Read
+                <input name="read_types[<%- read_types[index] %>]" type="checkbox" <% if (read_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Read
               </label>
 
               <label class='control-label pull-left read-write-label'>
-                <input name="write_types[<%- write_types[index] %>]" type="checkbox" <% if (index < write_types.length ) { %>checked<% } %> />&nbsp;Write
+                <input name="write_types[<%- write_types[index] %>]" type="checkbox" <% if (write_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Write
               </label>
             </div>
           </td>
