@@ -21,11 +21,11 @@
 
             <div class='clearfix'>
               <label class='control-label pull-left read-write-label'>
-                <input name="read_types[<%- read_types[index] %>]" type="checkbox" <% if (read_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Read
+                <input name="read_types[<%- type %>]" type="checkbox" <% if (read_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Read
               </label>
 
               <label class='control-label pull-left read-write-label'>
-                <input name="write_types[<%- write_types[index] %>]" type="checkbox" <% if (write_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Write
+                <input name="write_types[<%- type %>]" type="checkbox" <% if (write_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Write
               </label>
             </div>
           </td>
