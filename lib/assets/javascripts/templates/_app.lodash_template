@@ -24,8 +24,8 @@
       <% var types_length = Math.max(read_types.length, write_types.length) %>
       <% for (var index = 0; index < types_length; index++) {  %>
         <tr>
-          <td><%= read_types[index] %></td>
-          <td><%= write_types[index] %></td>
+          <td><%- read_types[index] %></td>
+          <td><%- write_types[index] %></td>
         </tr>
       <% } %>
     </tbody>
@@ -38,7 +38,7 @@
       <tbody>
         <% _.forEach(app.get('content.scopes'), function(scope) { %>
           <tr>
-            <td><%= scope %></td>
+            <td><%- scope %></td>
           </tr>
         <% }) %>
       </tbody>
