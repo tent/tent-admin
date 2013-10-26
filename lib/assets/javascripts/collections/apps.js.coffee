@@ -60,7 +60,8 @@ TentAdmin.Collections.Apps = class AppsCollection extends Marbles.Collection
       auth_json = _.find res.refs, (_post) ->
         _post.id == auth_ref.post
 
-      app.auth = new TentAdmin.Models.AppAuth(auth_json)
+      app.auth = TentAdmin.Models.AppAuth.find(id: auth_json.id, entity: auth_json.entity, fetch: false)
+      app.auth ?= new TentAdmin.Models.AppAuth(auth_json)
 
     models
 
