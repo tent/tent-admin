@@ -6,39 +6,52 @@
   <h3><%= app.get('content.name') %></h3>
   <p><%= app.get('content.description') %></p>
 
-  <h4>Permissions</h4>
-
+  <h4>Post Type Access</h4>
   <table class='table table-striped'>
-    <caption>Post Types</caption>
-
     <thead>
       <tr>
-        <th>Read</th>
-        <th>Write</th>
+        <th>Type URI</th>
       </tr>
     </thead>
 
     <tbody>
-      <% var read_types = (app.get('content.types.read') || []).sort() %>
-      <% var write_types = (app.get('content.types.write') || []).sort() %>
-      <% var types_length = Math.max(read_types.length, write_types.length) %>
-      <% for (var index = 0; index < types_length; index++) {  %>
+      <% read_types = app.auth.get('content.types.read') || [] %>
+      <% write_types = app.auth.get('content.types.write') || [] %>
+      <% all_types = (app.get('content.types.read') || []).concat(app.get('content.types.write') || []).sort() %>
+      <% for (var index=0, _len=all_types.length; index < _len; index++) { %>
+        <% type = all_types[index] %>
         <tr>
-          <td><%- read_types[index] %></td>
-          <td><%- write_types[index] %></td>
+          <td>
+            <span class='type-uri'><%- type %></span>
+
+            <div class='clearfix'>
+              <label class='control-label pull-left read-write-label'>
+                <input name="read_types[<%- type %>]" type="checkbox" disabled <% if (read_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Read
+              </label>
+
+              <label class='control-label pull-left read-write-label'>
+                <input name="write_types[<%- type %>]" type="checkbox" disabled <% if (write_types.indexOf(type) !== -1) { %>checked<% } %> />&nbsp;Write
+              </label>
+            </div>
+          </td>
         </tr>
       <% } %>
     </tbody>
   </table>
 
   <% if (app.get('content.scopes') && app.get('content.scopes').length) { %>
-    <table class='table table-striped'>
-      <caption>Scopes</caption>
+    <h4>Scopes</h4>
 
+    <table class='table table-striped'>
       <tbody>
-        <% _.forEach(app.get('content.scopes'), function(scope) { %>
+        <% authorized_scopes = app.auth.get('content.scopes') %>
+        <% app.get('content.scopes').forEach(function(scope) { %>
           <tr>
-            <td><%- scope %></td>
+            <td>
+              <label>
+                <input name="scopes[<%- scope %>]" type="checkbox" disabled <% if (authorized_scopes.indexOf(scope) != -1) { %>checked<% } %> />&nbsp;<%- scope %>
+              </label>
+            </td>
           </tr>
         <% }) %>
       </tbody>

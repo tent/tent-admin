@@ -11,8 +11,21 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
     @pagination_frozen = true
 
     @collection = TentAdmin.Collections.Apps.find(entity: TentAdmin.config.meta.content.entity) || new TentAdmin.Collections.Apps
-    @collection.on 'reset', => @render()
-    @collection.on 'append', @appendRender
+
+    @collection.on 'reset', =>
+      setImmediate =>
+        # defer until model.auth is set
+        # (see fetchSuccess() method of apps collection)
+
+        @render()
+
+    @collection.on 'append', (models) =>
+      setImmediate =>
+        # defer until model.auth is set
+        # (see fetchSuccess() method of apps collection)
+
+        @appendRender(models)
+
     @collection.fetch({
       max_refs: 2
     }, complete: (=> @pagination_frozen = false ))
@@ -31,6 +44,7 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
     for model in models
       Marbles.DOM.appendHTML(fragment, template.render(
         app: model
+        auth: model.auth
         protected_apps: TentAdmin.config.protected_apps || []
       ))
 
