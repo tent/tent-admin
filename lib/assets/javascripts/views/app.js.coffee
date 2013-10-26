@@ -30,13 +30,13 @@ Marbles.Views.App = class AppView extends Marbles.View
 
   showError: (app_cid, message) =>
     alert_el = Marbles.DOM.querySelector("[data-alert-cid=#{app_cid}]")
-    alert_el.innerText = message
+    Marbles.DOM.setInnerText(alert_el, message)
     Marbles.DOM.addClass(alert_el, 'alert-error')
     Marbles.DOM.removeClass(alert_el, 'hide')
 
   showSuccess: (app_cid, message) =>
     alert_el = Marbles.DOM.querySelector("[data-alert-cid=#{app_cid}]")
-    alert_el.innerText = message
+    Marbles.DOM.setInnerText(alert_el, message)
     Marbles.DOM.addClass(alert_el, 'alert-success')
     Marbles.DOM.removeClass(alert_el, 'hide')
 
