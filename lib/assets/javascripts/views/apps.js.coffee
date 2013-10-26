@@ -29,7 +29,10 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
     fragment = document.createDocumentFragment()
 
     for model in models
-      Marbles.DOM.appendHTML(fragment, template.render(app: model))
+      Marbles.DOM.appendHTML(fragment, template.render(
+        app: model
+        protected_apps: TentAdmin.config.protected_apps || []
+      ))
 
     @bindViews(fragment)
     ul.appendChild(fragment)
