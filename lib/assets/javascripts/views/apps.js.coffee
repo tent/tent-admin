@@ -12,15 +12,21 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
 
     @collection = TentAdmin.Collections.Apps.find(entity: TentAdmin.config.meta.content.entity) || new TentAdmin.Collections.Apps
 
+    _render_set_immediate = null
+
     @collection.on 'reset', =>
-      setImmediate =>
+      clearImmediate(_render_set_immediate)
+
+      _render_set_immediate = setImmediate =>
         # defer until model.auth is set
         # (see fetchSuccess() method of apps collection)
 
         @render()
 
     @collection.on 'append', (models) =>
-      setImmediate =>
+      clearImmediate(_render_set_immediate)
+
+      _render_set_immediate = setImmediate =>
         # defer until model.auth is set
         # (see fetchSuccess() method of apps collection)
 
