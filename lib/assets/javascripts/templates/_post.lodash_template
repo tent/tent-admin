@@ -1,0 +1,14 @@
+<li class="clearfix post" data-post_cid="<%- post.cid %>" data-view="Post">
+  <header>
+    <p>
+      <%- post.get('type') %><br/>
+      <%- post.get('entity') %><br/>
+      <%- post.get('id') %><br/>
+      <%- post.get('version.id') %><br/>
+    </p>
+  </header>
+
+  <article>
+    <%= partials._post_inner.render({ obj: post.toJSON() }, partials) %>
+  </article>
+</li>

@@ -3,6 +3,7 @@ TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
     ""        : "root"
     "profile" : "profile"
     "apps"    : "apps"
+    "posts"   : "posts"
   }
 
   authenticationRequired: (callback) ->
@@ -38,5 +39,10 @@ TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
   apps: =>
     @authenticationRequired =>
       new Marbles.Views.Apps container: TentAdmin.config.container
+      @resetScrollPosition()
+
+  posts: =>
+    @authenticationRequired =>
+      new Marbles.Views.Posts container: TentAdmin.config.container
       @resetScrollPosition()
 

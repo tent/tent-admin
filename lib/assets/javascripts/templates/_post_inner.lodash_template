@@ -1,0 +1,20 @@
+<% if (_.isArray(obj)) { %>
+  <% obj.forEach(function(val) { %>
+    <%= partials._post_inner.render({ obj: val }, partials) %>
+  <% }) %>
+<% } else if (_.isObject(obj)) { %>
+  <table class='table table-condensed table-bordered'>
+    <tbody>
+      <% _.each(obj, function(val, key) { %>
+        <tr>
+          <th><%- key %></th>
+          <td>
+            <%= partials._post_inner.render({ obj: val }, partials) %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } else { %>
+  <%- obj %><br/>
+<% } %>
