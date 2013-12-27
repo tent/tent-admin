@@ -5,7 +5,10 @@
 <% } else if (_.isObject(obj)) { %>
   <table class='table table-condensed table-bordered'>
     <tbody>
-      <% _.each(obj, function(val, key) { %>
+      <% var keys = context.keys || Object.keys(obj).sort() %>
+      <% _.each(keys, function(key) { %>
+        <% if (!obj.hasOwnProperty(key)) { return } %>
+        <% var val = obj[key] %>
         <tr>
           <th><%- key %></th>
           <td>
