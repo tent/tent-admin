@@ -46,6 +46,8 @@ _.extend window.TentAdmin, Marbles.Events, {
 
     Marbles.DOM.on window, 'scroll', (e) => @trigger 'window:scroll', e
 
+    Marbles.history.on 'handler:before', (handler, fragment, params) => @_query_params = params
+
     Marbles.history.start(_.extend({ root: (@config.PATH_PREFIX || '') + '/' }, options.history || {}))
 
     @ready = true
@@ -60,6 +62,9 @@ _.extend window.TentAdmin, Marbles.Events, {
     @_num_running_requests ?= 1
     @_num_running_requests -= 1
     Marbles.Views.loading_indicator?.hide() if @_num_running_requests == 0
+
+  queryParams: ->
+    @_query_params || Marbles.History::parseQueryParams(window.location.search)
 }
 
 TentAdmin.trigger('config:ready') if TentAdmin.config_ready

@@ -6,6 +6,8 @@ Marbles.Views.Posts = class AppsView extends Marbles.View
   @ul_selector: 'ul.posts'
   @last_post_selector: 'li.post:last-of-type'
 
+  @feed_param_names: ['limit', 'sort_by', 'since', 'until', 'before', 'entities', 'types', 'mentions', 'max_refs']
+
   pagination_frozen: true
 
   initialize: =>
@@ -21,7 +23,14 @@ Marbles.Views.Posts = class AppsView extends Marbles.View
     @collection.on 'append', (models) =>
       @appendRender(models)
 
-    @collection.fetch({}, complete: (=> @pagination_frozen = false ))
+    _params = TentAdmin.queryParams()
+    params = {}
+    _param_names = @constructor.feed_param_names
+    for k,v of _params
+      continue if _param_names.indexOf(k) == -1
+      params[k] = v
+
+    @collection.fetch(params, complete: (=> @pagination_frozen = false ))
 
   context: (models = @collection.models()) =>
     contextFn = Marbles.Views.Post::context
