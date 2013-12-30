@@ -5,7 +5,7 @@ TentAdmin.Routers.auth = new class AuthRouter extends Marbles.Router
   }
 
   signin: (params) =>
-    params.redirect = null if params.redirect && params.redirect.indexOf('://') < params.redirect.indexOf('/')
+    params.redirect = null if params.redirect && params.redirect.indexOf('://') != -1 && params.redirect.indexOf('://') < params.redirect.indexOf('/')
     params.redirect ?= TentAdmin.config.PATH_PREFIX || '/'
 
     if TentAdmin.config.authenticated
