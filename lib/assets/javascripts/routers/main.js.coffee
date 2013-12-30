@@ -33,8 +33,9 @@ TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
 
   profile: =>
     @authenticationRequired =>
-      new Marbles.Views.Profile container: TentAdmin.config.container
+      view = new Marbles.Views.Profile container: TentAdmin.config.container
       @resetScrollPosition()
+      Marbles.history.once 'handler:after', => view.detach()
 
   apps: =>
     @authenticationRequired =>
