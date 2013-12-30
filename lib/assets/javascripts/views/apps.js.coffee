@@ -3,6 +3,12 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
   @partial_names: ['_app']
   @view_name: 'apps'
 
+  detach: =>
+    for cid in @collection.model_ids
+      Marbles.Model.detach(cid)
+    @collection.detach()
+    super
+
   constructor: ->
     super
 
