@@ -11,8 +11,6 @@ Marbles.Views.EditableMultiselect = class EditableMultiselectView extends Marble
     value = @input_el.value
     @input_el.value = ""
 
-    console.log('Add value', value)
-
     option_el = document.createElement('option')
     option_el.value = value
     option_el.selected = true
