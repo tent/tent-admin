@@ -1,0 +1,13 @@
+<h1 class='page-header'>Posts <small><a href='<%- TentAdmin.Helpers.fullPath("/posts" + window.location.search) %>' data-view='PushStateLink'>raw</a></small></h1>
+
+<%= partials.filter_posts.render(context.filter_context, context.filter_partials) %>
+
+<% if (response.pages && response.pages.prev) { %>
+  <span class='btn btn-link' data-view='PrevPageLink'>Load Prev Page</span>
+<% } %>
+
+<pre><code><%= hljs.highlight('json', response_string).value %></code></pre>
+
+<% if (response.pages && response.pages.next) { %>
+  <span class='btn btn-link' data-view='NextPageLink'>Load Next Page</span>
+<% } %>

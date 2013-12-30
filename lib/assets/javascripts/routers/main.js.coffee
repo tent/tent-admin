@@ -1,9 +1,10 @@
 TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
   routes: {
-    ""        : "root"
-    "profile" : "profile"
-    "apps"    : "apps"
-    "posts"   : "posts"
+    ""          : "root"
+    "profile"   : "profile"
+    "apps"      : "apps"
+    "posts"     : "posts"
+    "posts/raw" : "postsRaw"
   }
 
   authenticationRequired: (callback) ->
@@ -48,4 +49,10 @@ TentAdmin.Routers.main = new class MainRouter extends Marbles.Router
       view = new Marbles.Views.Posts container: TentAdmin.config.container
       @resetScrollPosition()
       Marbles.history.once 'handler:before', => view.detach()
+
+  postsRaw: =>
+    @authenticationRequired =>
+      view = new Marbles.Views.PostsRaw container: TentAdmin.config.container
+      @resetScrollPosition()
+      Marbles.history.once 'handler:before', (handler, fragment, params) => view.detach()
 

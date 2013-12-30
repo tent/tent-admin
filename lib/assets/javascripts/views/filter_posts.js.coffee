@@ -83,7 +83,12 @@ Marbles.Views.FilterPosts = class FilterPostsView extends Marbles.View
   handleSubmit: (e) =>
     e?.preventDefault()
 
+    route = if @parentView().constructor.view_name == 'posts_raw'
+      'posts/raw'
+    else
+      'posts'
+
     params = @constructor.serializeForm(@el)
-    Marbles.history.navigate('posts' + @constructor.serializeParams(params), trigger: true)
+    Marbles.history.navigate(route + @constructor.serializeParams(params), trigger: true)
 
 Marbles.history.on 'handler:before', -> FilterPostsView.updateParams.apply(FilterPostsView, arguments)

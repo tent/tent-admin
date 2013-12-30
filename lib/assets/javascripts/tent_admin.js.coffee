@@ -1,3 +1,4 @@
+#= require highlight
 #= require_tree ./core_ext
 #= require tent-client
 #= require ./config
@@ -23,6 +24,11 @@ _.extend window.TentAdmin, Marbles.Events, {
         "#{parseInt((amount / 1000 / 1000) * 100) / 100 || 0}MB"
       else
         "#{parseInt((amount / 1000) * 100) / 100 || 0}KB"
+
+
+    fullPath: (path) ->
+      prefix = TentAdmin.config.PATH_PREFIX || '/'
+      (prefix + '/').replace(/\/+$/, '') + path
 
   }
 
