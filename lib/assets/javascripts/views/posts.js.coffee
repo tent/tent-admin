@@ -23,6 +23,9 @@ Marbles.Views.Posts = class PostsView extends Marbles.View
     @collection.on 'append', (models) =>
       @appendRender(models)
 
+    @collection.on 'prepend', (models) =>
+      @prependRender(models)
+
     _params = TentAdmin.queryParams()
     params = {}
     _param_names = Marbles.Views.FilterPosts.feed_param_names
@@ -39,8 +42,7 @@ Marbles.Views.Posts = class PostsView extends Marbles.View
     filter_context: Marbles.Views.FilterPosts.context()
     filter_partials: Marbles.Views.FilterPosts.partials
 
-  appendRender: (models) =>
-    ul = Marbles.DOM.querySelector(@constructor.ul_selector, @el)
+  buildChildren: (models) =>
     fragment = document.createDocumentFragment()
     template = Marbles.Views.Post.template
     partials = Marbles.Views.Post.partials
@@ -49,8 +51,31 @@ Marbles.Views.Posts = class PostsView extends Marbles.View
     for model in models
       Marbles.DOM.appendHTML(fragment, template.render(contextFn(model), partials))
 
+    fragment
+
+  prependRender: (models) =>
+    ul = Marbles.DOM.querySelector(@constructor.ul_selector, @el)
+
+    fragment = @buildChildren(models)
+
+    @bindViews(fragment)
+    Marbles.DOM.prependChild(ul, fragment)
+
+  appendRender: (models) =>
+    ul = Marbles.DOM.querySelector(@constructor.ul_selector, @el)
+
+    fragment = @buildChildren(models)
+
     @bindViews(fragment)
     ul.appendChild(fragment)
+
+  prevPage: =>
+    return if @pagination_frozen
+    @pagination_frozen = true
+    if @collection.fetchPrev(
+      complete: => @pagination_frozen = false
+    ) is false
+      @pagination_frozen = false
 
   nextPage: =>
     @pagination_frozen = true
