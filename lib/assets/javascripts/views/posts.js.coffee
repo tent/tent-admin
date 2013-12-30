@@ -8,6 +8,12 @@ Marbles.Views.Posts = class PostsView extends Marbles.View
 
   pagination_frozen: true
 
+  detach: =>
+    for cid in @collection.model_ids
+      Marbles.Model.detach(cid)
+    @collection.detach()
+    super
+
   initialize: =>
     @on 'ready', @initAutoPaginate
 
