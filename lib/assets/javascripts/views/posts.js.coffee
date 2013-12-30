@@ -1,17 +1,17 @@
-Marbles.Views.Posts = class AppsView extends Marbles.View
+Marbles.Views.Posts = class PostsView extends Marbles.View
   @template_name: 'posts'
-  @partial_names: ['_post', '_post_inner']
+  @partial_names: ['_post', '_post_inner', 'filter_posts']
   @view_name: 'posts'
 
   @ul_selector: 'ul.posts'
   @last_post_selector: 'li.post:last-of-type'
 
-  @feed_param_names: ['limit', 'sort_by', 'since', 'until', 'before', 'entities', 'types', 'mentions', 'max_refs']
-
   pagination_frozen: true
 
   initialize: =>
     @on 'ready', @initAutoPaginate
+
+    Marbles.Views.FilterPosts.initTemplates()
 
     @collection = TentAdmin.Collections.PostsCollection.find(entity: TentAdmin.config.meta.content.entity) || new TentAdmin.Collections.PostsCollection
 
@@ -25,7 +25,7 @@ Marbles.Views.Posts = class AppsView extends Marbles.View
 
     _params = TentAdmin.queryParams()
     params = {}
-    _param_names = @constructor.feed_param_names
+    _param_names = Marbles.Views.FilterPosts.feed_param_names
     for k,v of _params
       continue if _param_names.indexOf(k) == -1
       params[k] = v
@@ -36,6 +36,8 @@ Marbles.Views.Posts = class AppsView extends Marbles.View
     contextFn = Marbles.Views.Post::context
 
     posts: _.map models, (model) -> contextFn(model)
+    filter_context: Marbles.Views.FilterPosts.context()
+    filter_partials: Marbles.Views.FilterPosts.partials
 
   appendRender: (models) =>
     ul = Marbles.DOM.querySelector(@constructor.ul_selector, @el)

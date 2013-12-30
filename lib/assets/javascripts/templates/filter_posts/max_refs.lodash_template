@@ -1,0 +1,4 @@
+<label>
+  <%- name %>:&nbsp;
+  <input type='text' name='<%- name %>' value='<%- value %>' class='input-small' />
+</label>

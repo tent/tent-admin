@@ -1,0 +1,11 @@
+<form action='' method='GET' data-view='FilterPosts'>
+  <%= partials['filter_posts/available_params'].render(context, partials) %>
+
+  <% Object.keys(feed_params).forEach(function(name) { %>
+    <% feed_params[name].forEach(function(value) { %>
+      <%= partials['filter_posts/' + name].render({ name: name, value: value }, partials) %>
+    <% }) %>
+  <% }) %>
+
+  <input type='submit' value='Filter' />
+</form>

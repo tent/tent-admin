@@ -1,5 +1,7 @@
 <h1 class='page-header'>Posts</h1>
 
+<%= partials.filter_posts.render(context.filter_context, context.filter_partials) %>
+
 <ul class='unstyled posts'>
   <% _.forEach(posts, function(context) { %>
     <%= partials._post.render(context, partials) %>

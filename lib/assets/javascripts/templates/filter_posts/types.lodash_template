@@ -1,0 +1,11 @@
+<% if (typeof value === 'string') { value = [value] } %>
+<% if (value == null) { value = [] } %>
+<label>
+  <%- name %>:&nbsp;
+  <select name='<%- name %>' value='<%- value %>' multiple data-view="EditableMultiselect">
+    <option value=''>Any</option>
+    <% (value || []).forEach(function(type) { %>
+      <option value='<%- type %>' selected><%- type %></option>
+    <% }) %>
+  </select>
+</label>

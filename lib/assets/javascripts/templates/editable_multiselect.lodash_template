@@ -1,0 +1,4 @@
+<div>
+  <input type='text' class='input-xxlarge' />
+  <button>Add</button>
+</div>

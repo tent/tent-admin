@@ -1,0 +1,8 @@
+<div data-view='FilterPostsAvailableParams'>
+  <select>
+  <% available_feed_param_names.forEach(function(name) { %>
+    <option value='<%- name %>'><%- name %></option>
+  <% }) %>
+  </select>
+  <button>Add</button>
+</div>

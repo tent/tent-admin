@@ -1,0 +1,9 @@
+<label>
+  <%- name %>:&nbsp;
+  <select name='<%- name %>' value='<%- value %>'>
+    <option value='published_at' <% if (value === 'published_at') { %>selected<% } %>>published_at</option>
+    <option value='received_at' <% if (value === 'received_at') { %>selected<% } %>>received_at</option>
+    <option value='version.published_at' <% if (value === 'version.published_at') { %>selected<% } %>>version.published_at</option>
+    <option value='version.received_at' <% if (value === 'version.received_at') { %>selected<% } %>>version.received_at</option>
+  </select>
+</label>
