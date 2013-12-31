@@ -4,6 +4,7 @@ Marbles.Views.Apps = class AppsView extends Marbles.View
   @view_name: 'apps'
 
   detach: =>
+    @detachChildViews()
     for cid in @collection.model_ids
       Marbles.Model.detach(cid)
     @collection.detach()
