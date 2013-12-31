@@ -1,3 +1,9 @@
 <li class="clearfix post" data-post_cid="<%- post.cid %>" data-view="Post">
-  <%= partials._post_inner.render({ obj: post.toJSON(), keys: ['entity', 'type', 'id', 'version', 'permissions', 'published_at', 'received_at', 'mentions', 'refs', 'content', 'app'] }, partials) %>
+  <% if (context.post_json_string) { %>
+    <span class='btn btn-link pull-right' data-view='PostJSONToggle' data-target='table'>Table</span>
+    <pre><code><%= hljs.highlight('json', post_json_string).value %></code></pre>
+  <% } else { %>
+    <span class='btn btn-link pull-right' data-view='PostJSONToggle' data-target='json'>JSON</span>
+    <%= partials._post_inner.render({ obj: post.toJSON(), keys: ['entity', 'type', 'id', 'version', 'permissions', 'published_at', 'received_at', 'mentions', 'refs', 'content', 'app'] }, partials) %>
+  <% } %>
 </li>
