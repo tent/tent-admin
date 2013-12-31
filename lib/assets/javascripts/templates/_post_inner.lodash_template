@@ -1,6 +1,6 @@
 <% if (_.isArray(obj)) { %>
   <% obj.forEach(function(val) { %>
-    <%= partials._post_inner.render({ obj: val }, partials) %>
+    <%= partials._post_inner.render({ obj: val, key: key }, partials) %>
   <% }) %>
 <% } else if (_.isObject(obj)) { %>
   <table class='table table-condensed table-bordered'>
@@ -12,12 +12,14 @@
         <tr>
           <th><%- key %></th>
           <td>
-            <%= partials._post_inner.render({ obj: val }, partials) %>
+            <%= partials._post_inner.render({ obj: val, key: key }, partials) %>
           </td>
         </tr>
       <% }) %>
     </tbody>
   </table>
+<% } else if (_.isNumber(obj) && key.match(/_at$/)) { %>
+  <%- obj %> (<span data-view='RelativeTimestamp' data-datetime='<%- obj %>' title="<%- TentAdmin.Helpers.rawTime(obj) %>"><%- TentAdmin.Helpers.formatRelativeTime(obj) %></span>)<br/>
 <% } else { %>
   <%- obj %><br/>
 <% } %>

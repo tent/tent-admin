@@ -1,4 +1,5 @@
 #= require highlight
+#= require moment
 #= require_tree ./core_ext
 #= require tent-client
 #= require ./config
@@ -29,6 +30,17 @@ _.extend window.TentAdmin, Marbles.Events, {
     fullPath: (path) ->
       prefix = TentAdmin.config.PATH_PREFIX || '/'
       (prefix + '/').replace(/\/+$/, '') + path
+
+    formatRelativeTime: (timestamp_int) ->
+      now = moment()
+      time = moment(timestamp_int)
+
+      formatted_time = time.fromNow()
+
+      "#{formatted_time}"
+
+    rawTime: (timestamp_int) ->
+      moment(timestamp_int).format()
 
   }
 
