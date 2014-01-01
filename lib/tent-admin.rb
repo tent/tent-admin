@@ -10,7 +10,7 @@ module TentAdmin
 
   def self.settings
     @settings ||= {
-      :read_types => %w(),
+      :read_types => %w(all),
       :write_types => %w(
         https://tent.io/types/app/v0
         https://tent.io/types/app-auth/v0
