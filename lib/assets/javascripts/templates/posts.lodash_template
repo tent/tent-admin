@@ -2,8 +2,6 @@
 
 <%= partials.filter_posts.render(context.filter_context, context.filter_partials) %>
 
-<span class='btn btn-link' data-view='PrevPageLink'>Load Prev Page</span>
-
 <ul class='unstyled posts'>
   <% _.forEach(posts, function(context) { %>
     <%= partials._post.render(context, partials) %>
