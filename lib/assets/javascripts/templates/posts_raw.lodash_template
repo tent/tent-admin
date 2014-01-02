@@ -2,11 +2,11 @@
 
 <%= partials.filter_posts.render(context.filter_context, context.filter_partials) %>
 
+<pre><code><%= hljs.highlight('json', response_string).value %></code></pre>
+
 <% if (response.pages && response.pages.prev) { %>
   <span class='btn btn-link' data-view='PrevPageLink'>Load Prev Page</span>
 <% } %>
-
-<pre><code><%= hljs.highlight('json', response_string).value %></code></pre>
 
 <% if (response.pages && response.pages.next) { %>
   <span class='btn btn-link' data-view='NextPageLink'>Load Next Page</span>
