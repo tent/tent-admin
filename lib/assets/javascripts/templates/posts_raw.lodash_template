@@ -1,4 +1,4 @@
-<h1 class='page-header'>Posts <small><a href='<%- TentAdmin.Helpers.fullPath("/posts" + window.location.search) %>' data-view='PushStateLink'>full response</a></small></h1>
+<h1 class='page-header'>Posts <small><a href='<%- TentAdmin.Helpers.fullPath("/posts" + window.location.search) %>' data-view='PushStateLink'>individual posts</a></small></h1>
 
 <%= partials.filter_posts.render(context.filter_context, context.filter_partials) %>
 
