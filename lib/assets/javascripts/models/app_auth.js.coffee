@@ -25,6 +25,7 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
     TentAdmin.tent_client.post.get(params: params, callback: callbackFn)
 
   @fetchViaApp: (params, options = {}) ->
+    app = params.app
 
     callbackFn = (res, xhr) =>
       if xhr.status == 200 && res.posts.length && res.refs.length
