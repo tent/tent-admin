@@ -66,8 +66,8 @@ module TentAdmin
         {
           :credentials => auth,
           :meta => server_meta_post,
-          :app => {
-            :id => app['id']
+          :app_auth => {
+            :id => auth['id']
           },
           :protected_apps => [app['id']]
         }
