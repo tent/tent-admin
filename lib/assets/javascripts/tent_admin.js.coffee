@@ -48,6 +48,9 @@ _.extend window.TentAdmin, Marbles.Events, {
     Marbles.View.templates ?= window.LoDashTemplates
     return if !Marbles.history || Marbles.history.started
 
+    @before_ready = true
+    @trigger 'before:ready'
+
     @hideLoadingIndicator()
 
     @showLoadingIndicator()

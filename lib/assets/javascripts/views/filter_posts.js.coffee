@@ -76,6 +76,7 @@ Marbles.Views.FilterPosts = class FilterPostsView extends Marbles.View
     feed_query_string: @serializeParams(@feed_params)
     feed_params: @feed_params
     available_feed_param_names: @available_feed_param_names
+    app_id: Marbles.Views.PostsCommon.getAppId()
 
   initialize: =>
     Marbles.DOM.on @el, 'submit', @handleSubmit
@@ -89,6 +90,8 @@ Marbles.Views.FilterPosts = class FilterPostsView extends Marbles.View
       'posts'
 
     params = @constructor.serializeForm(@el)
+    if params.app_id?[0] == Marbles.Views.PostsCommon.getDefaultAppId()
+      delete params.app_id
     Marbles.history.navigate(route + @constructor.serializeParams(params), trigger: true)
 
 Marbles.history.on 'handler:before', -> FilterPostsView.updateParams.apply(FilterPostsView, arguments)

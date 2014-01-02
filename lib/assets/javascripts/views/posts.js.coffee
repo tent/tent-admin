@@ -1,4 +1,5 @@
-Marbles.Views.Posts = class PostsView extends Marbles.View
+#= require ./posts_common
+Marbles.Views.Posts = class PostsView extends Marbles.Views.PostsCommon
   @template_name: 'posts'
   @partial_names: ['_post', '_post_inner', 'filter_posts']
   @view_name: 'posts'
@@ -10,9 +11,10 @@ Marbles.Views.Posts = class PostsView extends Marbles.View
 
   detach: =>
     @detachChildViews()
-    for cid in @collection.model_ids
-      Marbles.Model.detach(cid)
-    @collection.detach()
+    if @collection
+      for cid in @collection.model_ids
+        Marbles.Model.detach(cid)
+      @collection.detach()
     super
 
   initialize: =>
@@ -20,34 +22,36 @@ Marbles.Views.Posts = class PostsView extends Marbles.View
 
     Marbles.Views.FilterPosts.initTemplates()
 
-    @collection = TentAdmin.Collections.PostsCollection.find(entity: TentAdmin.config.meta.content.entity) || new TentAdmin.Collections.PostsCollection
+    @constructor.withTentClient (tent_client) =>
+      @collection = new TentAdmin.Collections.PostsCollection()
+      @collection.options.tent_client = tent_client
 
-    @render()
+      @render()
 
-    @collection.on 'reset', (models) =>
-      @render(@context(models))
+      @collection.on 'reset', (models) =>
+        @render(@context(models))
 
-    @collection.on 'append', (models) =>
-      @appendRender(models)
+      @collection.on 'append', (models) =>
+        @appendRender(models)
 
-    @collection.on 'prepend', (models) =>
-      @prependRender(models)
+      @collection.on 'prepend', (models) =>
+        @prependRender(models)
 
-    _params = TentAdmin.queryParams()
-    params = {}
-    _param_names = Marbles.Views.FilterPosts.feed_param_names
-    for k,v of _params
-      continue if _param_names.indexOf(k) == -1
-      params[k] = v
+      _params = TentAdmin.queryParams()
+      params = {}
+      _param_names = Marbles.Views.FilterPosts.feed_param_names
+      for k,v of _params
+        continue if _param_names.indexOf(k) == -1
+        params[k] = v
 
-    @collection.fetch(params, complete: (=> @pagination_frozen = false ))
+      @collection.fetch(params, complete: (=> @pagination_frozen = false ))
 
   context: (models = @collection.models()) =>
     contextFn = Marbles.Views.Post::context
 
-    posts: _.map models, (model) -> contextFn(model)
-    filter_context: Marbles.Views.FilterPosts.context()
-    filter_partials: Marbles.Views.FilterPosts.partials
+    _.extend super(), {
+      posts: _.map models, (model) -> contextFn(model)
+    }
 
   buildChildren: (models) =>
     fragment = document.createDocumentFragment()

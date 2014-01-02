@@ -1,4 +1,5 @@
-Marbles.Views.PostsRaw = class PostsRawView extends Marbles.View
+#= require ./posts_common
+Marbles.Views.PostsRaw = class PostsRawView extends Marbles.Views.PostsCommon
   @template_name: 'posts_raw'
   @partial_names: ['filter_posts']
   @view_name: 'posts_raw'
@@ -46,7 +47,8 @@ Marbles.Views.PostsRaw = class PostsRawView extends Marbles.View
       options.complete?(res, xhr)
       @trigger('fetch:complete', res, xhr)
 
-    TentAdmin.tent_client.post.list(params: params, callback: complete)
+    @constructor.withTentClient (tent_client) =>
+      tent_client.post.list(params: params, callback: complete)
 
   fetchPrev: (options = {}) =>
     return false unless @pagination.prev
@@ -59,10 +61,10 @@ Marbles.Views.PostsRaw = class PostsRawView extends Marbles.View
     @fetch(next_params, options)
 
   context: =>
-    response: @current_response
-    response_string: JSON.stringify(@current_response, undefined, 2)
-    filter_context: Marbles.Views.FilterPosts.context()
-    filter_partials: Marbles.Views.FilterPosts.partials
+    _.extend super, {
+      response: @current_response
+      response_string: JSON.stringify(@current_response, undefined, 2)
+    }
 
   prevPage: =>
     return if @pagination_frozen

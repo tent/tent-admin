@@ -32,7 +32,7 @@ TentAdmin.Collections.PostsCollection = class PostsCollection extends Marbles.Co
       options.complete?(@, models, res, xhr)
       @trigger('fetch:complete', models, res, xhr, params, options)
 
-    TentAdmin.tent_client.post.list(params: params, callback: complete)
+    (@options.tent_client || TentAdmin.tent_client).post.list(params: params, callback: complete)
 
   fetchSuccess: (params, options, res, xhr) =>
     @pagination = _.extend({

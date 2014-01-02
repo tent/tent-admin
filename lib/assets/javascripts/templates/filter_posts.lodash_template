@@ -1,4 +1,9 @@
 <form action='' method='GET' data-view='FilterPosts'>
+  <label>
+    Fetch as app:&nbsp;
+    <input type='text' name='app_id' value='<%- app_id %>' />
+  </label>
+
   <%= partials['filter_posts/available_params'].render(context, partials) %>
 
   <% Object.keys(feed_params).forEach(function(name) { %>
