@@ -5,8 +5,26 @@ TentAdmin.Models.AppAuth = class AppAuthModel extends Marbles.Model
   @post_type: new TentClient.PostType('https://tent.io/types/app-auth/v0#')
 
   @fetch: (params, options = {}) ->
-    unless app = params.app
-      throw "params.app not given"
+    unless (app = params.app) || (params.post && params.entity)
+      throw "params.app or (params.post and params.entity) not given"
+
+    if app
+      @fetchViaApp(params, options)
+    else
+      @fetchViaId(params, options)
+
+  @fetchViaId: (params, options = {}) ->
+    callbackFn = (res, xhr) =>
+      if xhr.status == 200
+        model = new @(res.post)
+        options.success?(model, xhr)
+      else
+        options.failure?(res, xhr)
+      options.complete?(res, xhr)
+
+    TentAdmin.tent_client.post.get(params: params, callback: callbackFn)
+
+  @fetchViaApp: (params, options = {}) ->
 
     callbackFn = (res, xhr) =>
       if xhr.status == 200 && res.posts.length && res.refs.length

@@ -1,72 +1,57 @@
 Marbles.Views.PostsCommon = class PostsCommonView extends Marbles.View
-  @getDefaultAppId: ->
-    TentAdmin.config.app.id
+  @getDefaultAppAuthId: ->
+    TentAdmin.config.app_auth.id
 
-  @getAppId: ->
-    @app_id || TentAdmin.config.app.id
+  @getAppAuthId: ->
+    @app_auth_id || TentAdmin.config.app_auth.id
 
   @handlerBefore: (handler, fragment, params) =>
-    if params.app_id
-      @app_id = params.app_id
+    if params.app_auth_id
+      @app_auth_id = params.app_auth_id
       @loadTentClient()
     else
-      @app_id = @getDefaultAppId()
+      @app_auth_id = @getDefaultAppAuthId()
       @loadTentClient()
 
   @_loading = true
   @loadTentClient: =>
     @_loading = true
     @tent_client = null
-    if @getAppId() == @getDefaultAppId()
+    if @getAppAuthId() == @getDefaultAppAuthId()
       @_loading = false
       @trigger 'loading:complete'
       return
 
-    @fetchApp(@getAppId())
+    @fetchAppAuth(@getAppAuthId())
 
   @fetchFailure: (msg) =>
     alert(msg)
     @_loading = false
     @trigger 'loading:complete'
 
-  @fetchApp: (app_id) =>
-    TentAdmin.Models.App.find(
-      { post: app_id, entity: TentAdmin.config.meta.content.entity },
+  @fetchAppAuth: (app_auth_id) =>
+    TentAdmin.Models.AppAuth.find(
+      { post: app_auth_id, entity: TentAdmin.config.meta.content.entity },
       {
-        success: @fetchAppSuccess
-        failure: @fetchAppFailure
+        success: @fetchAppAuthSuccess
+        failure: @fetchAppAuthFailure
       }
     )
 
-  @fetchAppSuccess: (app) =>
-    @fetchAppAuth(app, success: @fetchAppAuthSuccess, failure: @fetchAppAuthFailure)
-
-  @fetchAppFailure: =>
-    @fetchFailure('failed to fetch app')
-
-  @fetchAppAuth: (app, options = {}) =>
-    TentAdmin.Models.AppAuth.fetch({ app: app },
-      success: (app_auth) =>
-        options.success?(app, app_auth)
-
-      failure: (res, xhr) =>
-        options.failure?(app, res, xhr)
-    )
-
-  @fetchAppAuthSuccess: (app, app_auth) =>
+  @fetchAppAuthSuccess: (app_auth) =>
     if app_auth.credentials
-      @fetchAppAuthCredentialsSuccess(app, app_auth)
+      @fetchAppAuthCredentialsSuccess(app_auth)
       return
 
     app_auth.fetchCredentials(
-      success: => @fetchAppAuthCredentialsSuccess(app, app_auth)
+      success: => @fetchAppAuthCredentialsSuccess(app_auth)
       failure: @fetchAppAuthCredentialsFailure
     )
 
   @fetchAppAuthFailure: =>
     @fetchFailure('failed to fetch app auth')
 
-  @fetchAppAuthCredentialsSuccess: (app, app_auth) =>
+  @fetchAppAuthCredentialsSuccess: (app_auth) =>
     @credentials = {
       id: app_auth.get('credentials.id')
       hawk_key: app_auth.get('credentials.content.hawk_key')
