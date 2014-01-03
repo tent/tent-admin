@@ -6,6 +6,8 @@ Marbles.Views.PostsCommon = class PostsCommonView extends Marbles.View
     @app_auth_id || TentAdmin.config.app_auth.id
 
   @handlerBefore: (handler, fragment, params) =>
+    return unless TentAdmin.config.authenticated
+
     if params.app_auth_id
       @app_auth_id = params.app_auth_id
       @loadTentClient()
