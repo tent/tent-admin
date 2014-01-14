@@ -1,4 +1,5 @@
 require "tent-admin/version"
+require "yajl"
 
 module TentAdmin
   require 'tent-client/tent_type'
