@@ -1,19 +1,9 @@
 <ul class='unstyled custom-container'>
-  <% if TentAdmin.settings[:status_url] %>
-    <li>
-      <a href='<%= TentAdmin.settings[:status_url] %>'><div class='nav-icon app-icon-tentstatus icon-2x'></div></a>
+  <% TentAdmin.settings[:global_nav_config]['items'].to_a.each do |item| %>
+    <li <% if item['selected'] %>class='nav-selected'<% end %>>
+      <a href='<%= item['url'] %>' title='<%= item['name'] %>'><div class='nav-icon icon-2x <%= item['icon_class'] %>'></div></a>
     </li>
   <% end %>
-
-  <% if TentAdmin.settings[:search_url] %>
-    <li>
-      <a href="<%= TentAdmin.settings[:search_url] %>" title='Search'><div class='nav-icon app-icon-search icon-2x'></div></a>
-    </li>
-  <% end %>
-
-  <li class='nav-selected'>
-    <a href='<%= TentAdmin.settings[:url] %>' title='Admin'><div class='nav-icon app-icon-settings icon-2x'></div></a>
-  </li>
 
   <li>
     <a data-view="AuthButton" data-signout-title='Sign out' data-signin-title="Sign in">

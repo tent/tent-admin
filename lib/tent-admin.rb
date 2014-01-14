@@ -32,8 +32,6 @@ module TentAdmin
     ##
     # App settings
     self.settings[:url]                  = options[:url]                  || ENV['URL']
-    self.settings[:status_url]           = options[:status_url]           || ENV['STATUS_URL']
-    self.settings[:search_url]           = options[:search_url]           || ENV['SEARCH_URL']
     self.settings[:path_prefix]          = options[:path_prefix]          || ENV['PATH_PREFIX']
     self.settings[:public_dir]           = options[:public_dir]           || ENV['ASSETS_DIR'] || File.expand_path('../../public/assets', __FILE__) # lib/../public/assets
     self.settings[:database_url]         = options[:database_url]         || ENV['DATABASE_URL']
@@ -51,6 +49,15 @@ module TentAdmin
     end
 
     self.settings[:asset_manifest] = Yajl::Parser.parse(File.read(ENV['APP_ASSET_MANIFEST'])) if ENV['APP_ASSET_MANIFEST'] && File.exists?(ENV['APP_ASSET_MANIFEST'])
+
+    self.settings[:global_nav_config] ||= Yajl::Parser.parse(File.read(ENV['GLOBAL_NAV_CONFIG'])) if ENV['GLOBAL_NAV_CONFIG'] && File.exists?(ENV['GLOBAL_NAV_CONFIG'])
+
+    if self.settings[:global_nav_config].nil?
+      global_nav_items = [
+        { "name" => "Admin", "url" => TentAdmin.settings[:url], "icon_class" => "app-icon-settings", "selected" => true }
+      ]
+      self.settings[:global_nav_config] = { 'items' => global_nav_items }
+    end
 
     # bypass oauth when true
     self.settings[:skip_authentication] = (options[:skip_authentication] == true) || (ENV['SKIP_AUTHENTICATION'] == 'true')

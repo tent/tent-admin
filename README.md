@@ -19,6 +19,7 @@ PATH_PREFIX          | `:path_prefix`          | Optional | Path prefix if app i
 ASSET_ROOT           | `:asset_root`           | Optional | Root URL where assets are served from. Defaults to `/assets`.
 ASSET_CACHE_DIR      | `:asset_cache_dir`      | Optional | Filesystem path for sprockets asset cache dir.
 JSON_CONFIG_URL      | `:json_config_url`      | Optional | URL where `config.json` is served from. Defaults to `/config.json`.
+GLOBAL_NAV_CONFIG    | `:global_nav_config`    | Optional | Filesystem path to global nav config as descripbed below.
 SIGNOUT_URL          | `:signout_url`          | Optional | URL where sign-out action is located. Defaults to `/signout`.
 SIGNOUT_REDIRECT_URL | `:signout_redirect_url` | Optional | URL to redirect to after signing out.
 SIGNIN_URL           | `:signin_url`           | Optional | URL accepting a POST request with form encoded `username` and `passphrase` to authorize `config.json`.
@@ -26,6 +27,16 @@ APP_ASSET_MANIFEST   |                         | Optional | File path to existin
 SKIP_AUTHENTICATION  | `:skip_authentication`  | Optional | Bypasses OAuth flow when set to `true`. This only works when config.json is loaded from another source.
 ASSETS_DIR           | `:public_dir`           | Optional | Defaults to `public/assets`.
 DEFAULT_AVATAR_ROOT  | `:default_avatar_root`  | Optional | Defaults to a static avatar. If set, appending `"/" + encodeURIComponent(entity)` should point to a unique avatar for that entity (see [Sigil](https://github.com/cupcake/sigil) for more information).
+
+#### Global nav config
+
+```json
+{
+	"items": [
+		{ "name": "Tent Status", "icon_class": "app-icon-tentstatus", "url": "http://localhost:9292", "selected": true }
+	]
+}
+```
 
 ### Running on it's own
 
