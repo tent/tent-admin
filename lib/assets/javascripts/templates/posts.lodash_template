@@ -7,3 +7,7 @@
     <%= partials._post.render(context, partials) %>
   <% }) %>
 </ul>
+
+<% if (!lastPage) { %>
+  <span class='btn btn-link' data-view='NextPageLink'>Load Next Page</span>
+<% } %>

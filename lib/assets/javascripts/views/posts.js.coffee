@@ -18,8 +18,6 @@ Marbles.Views.Posts = class PostsView extends Marbles.Views.PostsCommon
     super
 
   initialize: =>
-    @on 'ready', @initAutoPaginate
-
     Marbles.Views.FilterPosts.initTemplates()
 
     @constructor.withTentClient (tent_client) =>
@@ -50,7 +48,8 @@ Marbles.Views.Posts = class PostsView extends Marbles.Views.PostsCommon
     contextFn = Marbles.Views.Post::context
 
     _.extend super(), {
-      posts: _.map models, (model) -> contextFn(model)
+      posts: _.map(models, (model) -> contextFn(model)),
+      lastPage: @last_page
     }
 
   buildChildren: (models) =>
@@ -94,20 +93,4 @@ Marbles.Views.Posts = class PostsView extends Marbles.Views.PostsCommon
       complete: => @pagination_frozen = false
     ) is false
       @last_page = true
-
-  initAutoPaginate: =>
-    TentAdmin.on 'window:scroll', @windowScrolled
-    setTimeout @windowScrolled, 100
-
-  windowScrolled: =>
-    return if @pagination_frozen || @last_page
-    last_post = Marbles.DOM.querySelector(@constructor.last_post_selector, @el)
-    return unless last_post
-    last_post_offset_top = last_post.offsetTop || 0
-    last_post_offset_top += last_post.offsetHeight || 0
-    bottom_position = window.scrollY + Marbles.DOM.windowHeight()
-
-    if last_post_offset_top <= bottom_position
-      clearTimeout @_auto_paginate_timeout
-      @_auto_paginate_timeout = setTimeout @nextPage, 0 unless @last_page
 
